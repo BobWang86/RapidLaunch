@@ -1,0 +1,60 @@
+﻿@model RapidLaunch.Models.Launch
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Launch</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LaunchID" />
+            <div class="form-group">
+                <label asp-for="LaunchDate" class="control-label"></label>
+                <input asp-for="LaunchDate" class="form-control" />
+                <span asp-validation-for="LaunchDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LaunchTime" class="control-label"></label>
+                <input asp-for="LaunchTime" class="form-control" />
+                <span asp-validation-for="LaunchTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RocketID" class="control-label"></label>
+                <select asp-for="RocketID" class="form-control" asp-items="ViewBag.RocketID"></select>
+                <span asp-validation-for="RocketID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LaunchPadID" class="control-label"></label>
+                <select asp-for="LaunchPadID" class="form-control" asp-items="ViewBag.LaunchPadID"></select>
+                <span asp-validation-for="LaunchPadID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LaunchOrbitID" class="control-label"></label>
+                <select asp-for="LaunchOrbitID" class="form-control" asp-items="ViewBag.LaunchOrbitID"></select>
+                <span asp-validation-for="LaunchOrbitID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LaunchStatusID" class="control-label"></label>
+                <select asp-for="LaunchStatusID" class="form-control" asp-items="ViewBag.LaunchStatusID"></select>
+                <span asp-validation-for="LaunchStatusID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

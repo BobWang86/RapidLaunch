@@ -1,0 +1,66 @@
+﻿@model IEnumerable<RapidLaunch.Models.Launch>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LaunchDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LaunchTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rocket)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LaunchPad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LaunchOrbit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LaunchStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaunchDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaunchTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rocket.RocketID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaunchPad.LaunchPadCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaunchOrbit.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaunchStatus.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LaunchID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LaunchID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LaunchID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

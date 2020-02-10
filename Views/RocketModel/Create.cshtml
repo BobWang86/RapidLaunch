@@ -1,0 +1,68 @@
+﻿@model RapidLaunch.Models.RocketModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h1>Create</h1>
+<h4>Rocket Model</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Height" class="control-label"></label>
+                <input asp-for="Height" class="form-control" />
+                <span asp-validation-for="Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mass" class="control-label"></label>
+                <input asp-for="Mass" class="form-control" />
+                <span asp-validation-for="Mass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Diameter" class="control-label"></label>
+                <input asp-for="Diameter" class="form-control" />
+                <span asp-validation-for="Diameter" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayloadLEO" class="control-label"></label>
+                <input asp-for="PayloadLEO" class="form-control" />
+                <span asp-validation-for="PayloadLEO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayloadGTO" class="control-label"></label>
+                <input asp-for="PayloadGTO" class="form-control" />
+                <span asp-validation-for="PayloadGTO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ManufacturerID" class="control-label"></label>
+                <select asp-for="ManufacturerID" class="form-control" asp-items="ViewBag.ManufacturerID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RocketCategoryID" class="control-label"></label>
+                <select asp-for="RocketCategoryID" class="form-control" asp-items="ViewBag.RocketCategoryID"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" /> |
+                <a asp-action="Manage" class="btn btn-info">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

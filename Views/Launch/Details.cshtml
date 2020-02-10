@@ -1,0 +1,55 @@
+﻿@model RapidLaunch.Models.Launch
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Launch</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LaunchDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LaunchDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LaunchTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LaunchTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rocket)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rocket.RocketID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LaunchPad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LaunchPad.LaunchPadCode)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LaunchOrbit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LaunchOrbit.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LaunchStatus)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LaunchStatus.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.LaunchID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
