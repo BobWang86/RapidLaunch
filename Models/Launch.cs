@@ -14,11 +14,11 @@ namespace RapidLaunch.Models
         public int LaunchID { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "DateTime2")]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime LaunchDate { get; set; }
         [DataType(DataType.Time)]
         [Column(TypeName = "DateTime2")]
-        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = false)]
         public DateTime LaunchTime { get; set; }
 
         public int RocketID { get; set; }

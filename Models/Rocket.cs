@@ -12,9 +12,12 @@ namespace RapidLaunch.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RocketID { get; set; }
+        [Required]
+        [Display(Name = "Rocket Code")]
+        public string RocketCode { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime ManufactureDate { get; set; }
 
         [Display(Name = "Rocket Model")]

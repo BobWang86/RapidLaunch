@@ -25,8 +25,6 @@ namespace RapidLaunch.Models
         [DataType(DataType.PostalCode)]
         public string PostalCode { get; set; }
 
-        [ForeignKey("Contact")]
-        public int ContactID { get; set; }
         public Contact Contact { get; set; }
     }
 }

@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>LaunchSite</h4>
+<h3>Create Launch Site</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,9 +22,12 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
+                <label class="control-label">Longitude</label>
+                <input name="longitude" type="number" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Latitude</label>
+                <input name="latitude" type="number" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="BuildDate" class="control-label"></label>
@@ -34,14 +35,11 @@
                 <span asp-validation-for="BuildDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />|
+                <a asp-action="Manage" class="btn btn-info">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

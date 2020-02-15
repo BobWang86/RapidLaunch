@@ -81,6 +81,26 @@ a, a:hover, a:focus {
 .bg-theme04 {
   background-color: #ed5565;
 }
+
+.bg-rocket01 {
+    background-color: #adb8c5;
+}
+
+.bg-rocket02 {
+    background-color: #8597a9;
+}
+
+.bg-rocket03 {
+    background-color: #5e778d;
+}
+
+.bg-rocket04 {
+    background-color: #375873;
+}
+
+.bg-rocket05 {
+    background-color: #003b59;
+}
 /*Theme Buttons*/
 
 .btn-theme {

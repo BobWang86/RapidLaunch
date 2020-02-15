@@ -11,7 +11,7 @@ namespace RapidLaunch.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int JobTitleID { get; set; }
+        public int PositionID { get; set; }
         [Required]
         public string Name { get; set; }
 

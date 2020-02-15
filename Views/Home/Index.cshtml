@@ -1,7 +1,112 @@
-﻿@{
+﻿@model RapidLaunch.Models.ViewModels.LaunchVM
+
+@{
     ViewData["Title"] = "Home Page";
+    var responseString = Html.Raw(ViewData["ResponseString"]);
+    var responseObject = Html.Raw(ViewData["ResponseObject"]);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<h4>Upcoming Rocket Launches</h4>
+<hr>
+
+<div class="row mt">
+    <div class="col-md-12 ds">
+        <div class="detailed mt">
+            <div class="recent-activity">
+
+                @for (int i = 1; i <= 5; i++)
+                {
+                    var bg = $"bg-rocket0{i}";
+                    var date = $"date0{i}";
+                    var weather = $"weather0{i}";
+                    var rocket = $"rocket0{i}";
+                    var provider = $"provider0{i}";
+                    var mission = $"mission0{i}";
+                    var pad = $"pad0{i}";
+
+                    <div class="activity-icon @bg"><i class="fa fa-rocket"></i></div>
+                    <div class="activity-panel row">
+                        <div class="col-md-4">
+                            <h5>DateTime</h5>
+                            <p id="@date"></p>
+                            <h5>Weather</h5>
+                            <p id="@weather"></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Rocket</h5>
+                            <p id="@rocket"></p>
+                            <h5>Provider</h5>
+                            <p id="@provider"></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Mission</h5>
+                            <p id="@mission"></p>
+                            <h5>Launch Pad</h5>
+                            <p id="@pad"></p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+<br />
+
+<h4>Rocket Launch History</h4>
+<hr>
+<div class="content-panel">
+    <div class="panel-body">
+        <div id="morris">
+            <div class="row mt">
+                <div class="col-lg-12">
+                    <div class="content-panel">
+                        <div class="panel-body">
+                            <div id="morris-area" class="graph"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var responses = @responseString;
+        for (var i = 1; i <= 5; i++) {
+            var result = responses.result[i - 1];
+            $(`#date0${i}`).text(result.date_str);
+            $(`#weather0${i}`).text(result.weather_summary);
+            $(`#rocket0${i}`).text(result.vehicle.name);
+            $(`#provider0${i}`).text(result.provider.name);
+            $(`#mission0${i}`).text(result.missions[0].name);
+            $(`#pad0${i}`).text(result.pad.location.name);
+        }
+
+        $.ajax({
+          method: "GET",
+          url: "Home/GetLaunchHistory"
+        }).done(function (data) {
+
+            var years = [];
+            data.forEach(function (value) {
+                years.push(value.launchYear)
+            });
+
+            Morris.Line({
+                element: 'morris-area',
+                data: data,
+                xkey: 'launchYear',
+                ykeys: ['success', 'failure', 'abort'],
+                labels: ['success', 'failure', 'abort'],
+                hideHover: 'auto',
+                lineWidth: 1,
+                pointSize: 5,
+                lineColors: ['#4a8bc2', '#ff6c60', '#a9d86e'],
+                fillOpacity: 0.5,
+                smooth: true
+              });
+        });
+    });
+</script>

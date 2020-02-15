@@ -17,11 +17,11 @@ namespace RapidLaunch.Models
         public int ShiftID { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime StartDate { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime? EndDate { get; set; }
 
         public  Staff Staff { get; set; }

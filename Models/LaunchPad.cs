@@ -15,6 +15,7 @@ namespace RapidLaunch.Models
         [Required]
         public string LaunchPadCode { get; set; }
 
+        [Display(Name = "Launch Site")]
         public int LaunchSiteID { get; set; }
         public LaunchSite LaunchSite { get; set; }
         public ICollection<Launch> Launches { get; set; }

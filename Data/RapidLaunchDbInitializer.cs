@@ -6,6 +6,7 @@ using System;
 using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using Bogus;
+using Bogus.Extensions.UnitedStates;
 
 namespace RapidLaunch.Data
 {
@@ -16,6 +17,7 @@ namespace RapidLaunch.Data
             RapidLaunchDbContext context = app.ApplicationServices.GetRequiredService<RapidLaunchDbContext>();
             var faker = new Faker("en");
             context.Database.EnsureCreated();
+            #region RocketDB Initializer
             if (!context.Manufacturers.Any())
             {
                 context.Manufacturers.AddRange(
@@ -678,10 +680,13 @@ namespace RapidLaunch.Data
                 int rocketStatusCount = context.RocketStatuses.Count();
                 foreach (int modelID in rocketModelList)
                 {
-                    for (int i = 0; i < 3; i++)
+                    string rocketModelName = context.RocketModels.FirstOrDefault(r => r.RocketModelID == modelID).Name;
+
+                    for (int i = 1; i <= 3; i++)
                     {
                         context.Rockets.Add(new Rocket {
                             ManufactureDate = faker.Date.Between(new DateTime(1945, 01, 01), DateTime.Now),
+                            RocketCode = $"{rocketModelName}-RCT{i}",
                             RocketModelID = modelID,
                             RocketStatusID = faker.Random.Number(1, rocketStatusCount)
                         });
@@ -949,7 +954,7 @@ namespace RapidLaunch.Data
                     },
                     new LaunchStatus
                     {
-                        Name = "Partial Failure"
+                        Name = "Failure"
                     },
                     new LaunchStatus
                     {
@@ -958,6 +963,10 @@ namespace RapidLaunch.Data
                     new LaunchStatus
                     {
                         Name = "Loss Before Launch"
+                    },
+                    new LaunchStatus
+                    {
+                        Name = "Abort Before Launch"
                     },
                     new LaunchStatus
                     {
@@ -992,7 +1001,7 @@ namespace RapidLaunch.Data
                 int launchStatus = 0;
                 int launchStatusScheduled = context.LaunchStatuses.FirstOrDefault(s => s.Name == "Scheduled").LaunchStatusID;
                 int launchStatusSuccess = context.LaunchStatuses.FirstOrDefault(s => s.Name == "Success").LaunchStatusID;
-                for (int i = 0; i < 96; i++)
+                for (int i = 0; i < faker.Random.Number(75, 95); i++)
                 {
                     launchStatusList.Add(launchStatusSuccess);
                 }
@@ -1031,6 +1040,331 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+            #endregion
+
+            #region StaffDB Initializer
+            if (!context.Shifts.Any())
+            {
+                context.Shifts.AddRange(
+                    new Shift
+                    {
+                        Name = "Day",
+                        StartTime = new TimeSpan(8,0,0),
+                        EndTime = new TimeSpan(16,0,0)
+                    },
+                    new Shift
+                    {
+                        Name = "Evening",
+                        StartTime = new TimeSpan(16, 0, 0),
+                        EndTime = new TimeSpan(22, 0, 0)
+                    },
+                    new Shift
+                    {
+                        Name = "Night",
+                        StartTime = new TimeSpan(0, 0, 0),
+                        EndTime = new TimeSpan(8, 0, 0)
+                    }
+                );
+            }
+            context.SaveChanges();
+            if (!context.PayRates.Any())
+            {
+                for (int i = 1; i <= 8; i++)
+                {
+                    context.PayRates.Add(
+                        new PayRate
+                        {
+                            Rank = i
+                        }
+                    );
+                }
+            }
+            context.SaveChanges();
+            if (!context.Departments.Any())
+            {
+                context.Departments.AddRange(
+                    new Department
+                    {
+                        Name = "Software Engineering",
+                        GroupName = "Research and Development"
+                    },
+                    new Department
+                    {
+                        Name = "Web Design",
+                        GroupName = "Research and Development"
+                    },
+                    new Department
+                    {
+                        Name = "Sales",
+                        GroupName = "Sales and Marketing"
+                    },
+                    new Department
+                    {
+                        Name = "Marketing",
+                        GroupName = "Sales and Marketing"
+                    },
+                    new Department
+                    {
+                        Name = "Human Resources",
+                        GroupName = "Executive General and Administration"
+                    },
+                    new Department
+                    {
+                        Name = "Finance",
+                        GroupName = "Executive General and Administration"
+                    },
+                    new Department
+                    {
+                        Name = "Information Services",
+                        GroupName = "Executive General and Administration"
+                    },
+                    new Department
+                    {
+                        Name = "Document Control",
+                        GroupName = "Quality Assurance"
+                    },
+                    new Department
+                    {
+                        Name = "Quality Assurance",
+                        GroupName = "Quality Assurance"
+                    },
+                    new Department
+                    {
+                        Name = "Executive",
+                        GroupName = "Executive General and Administration"
+                    }
+                );
+            }
+            context.SaveChanges();
+            if (!context.Positions.Any())
+            {
+                context.Positions.AddRange(
+                    new Position {
+                        Name = "Chief Executive Officer",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Executive").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 8).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Vice President of Engineering",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Software Engineering").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 7).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Engineering Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Software Engineering").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 7).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Software Engineer",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Software Engineering").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Infrastructure Technician",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Software Engineering").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Network Administrator",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Software Engineering").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Database Administrator",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Software Engineering").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Senior Web Designer",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Web Design").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 5).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Associate Web Designer",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Web Design").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 4).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Marketing Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Marketing").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 5).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Marketing Specialist",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Marketing").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 4).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Marketing Assistant",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Marketing").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 3).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Sales Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Sales").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 4).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Sales Representative",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Sales").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 3).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Document Control Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Document Control").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 4).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Document Control Assistant",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Document Control").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 3).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Quality Assurance Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Quality Assurance").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 4).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Quality Assurance Technician",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Quality Assurance").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 3).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Information Services Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Information Services").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Human Resource Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Human Resources").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Human Resource Administrator",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Human Resources").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Chief Financial Officer",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Finance").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 6).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Finance Manager",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Finance").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 5).PayRateID
+                    },
+                    new Position
+                    {
+                        Name = "Accountant",
+                        DepartmentID = context.Departments.FirstOrDefault(d => d.Name == "Finance").DepartmentID,
+                        PayRateID = context.PayRates.FirstOrDefault(p => p.Rank == 4).PayRateID
+                    }
+                );
+            }
+            context.SaveChanges();
+            if (!context.Addresses.Any())
+            {
+                for (int i = 1; i <= 32; i++)
+                {
+                    context.Addresses.Add(
+                        new Address { 
+                            AddressLine1 = faker.Address.SecondaryAddress(),
+                            AddressLine2 = faker.Address.StreetAddress(),
+                            City =faker.Address.City(),
+                            State = faker.Address.State(),
+                            Country = faker.Address.County(),
+                            PostalCode = faker.Address.ZipCode(),
+                        }    
+                    );
+                }
+            }
+            context.SaveChanges();
+            if (!context.Contacts.Any())
+            {
+                for (int i = 1; i <= 32; i++)
+                {
+                    context.Contacts.Add(
+                        new Contact { 
+                            PhoneNumber = faker.Phone.PhoneNumber(),
+                            EmailAddress = faker.Internet.Email(),
+                            AddressID =i
+                        }
+                    );
+                }
+            }
+            context.SaveChanges();
+            if (!context.People.Any())
+            {
+                for (int i = 1; i <= 32; i++)
+                {
+                    context.People.Add(
+                        new RapidLaunch.Models.Person { 
+                            FirstName = faker.Name.FirstName(),
+                            LastName = faker.Name.LastName(),
+                            BirthDate = faker.Date.Between(new DateTime(1960,1,1), new DateTime(2000,1,1)),
+                            NationalInsuranceNumber = faker.Internet.Mac(),
+                            ContactID = i
+                        }
+                    );
+                }
+            }
+            context.SaveChanges();
+            if (!context.Staff.Any())
+            {
+                List<int> positions = context.Positions.Select(i => i.PositionID).ToList();
+                int SoftwareEngineer = context.Positions.FirstOrDefault(i => i.Name == "Software Engineer").PositionID;
+                int SalesRepresentative = context.Positions.FirstOrDefault(i => i.Name == "Sales Representative").PositionID;
+                int WebDesigner = context.Positions.FirstOrDefault(i => i.Name == "Associate Web Designer").PositionID;
+                int Accountant = context.Positions.FirstOrDefault(i => i.Name == "Accountant").PositionID;
+                for (int i = 0; i < 2; i++)
+                {
+                    positions.Add(SoftwareEngineer);
+                    positions.Add(WebDesigner);
+                    positions.Add(SalesRepresentative);
+                    positions.Add(Accountant);
+                }
+
+                for (int i = 1; i <= 32; i++)
+                {
+                    int position = faker.PickRandom<int>(positions);
+                    positions.Remove(position);
+
+                    context.Staff.Add(
+                        new Staff { 
+                            PersonID = i,
+                            PositionID = position,
+                            HireDate = faker.Date.Between(new DateTime(2010,1,1), new DateTime(2020,1,1))
+                        }
+                    );
+                }
+            }
+            context.SaveChanges();
+
+            #endregion
+
         }
     }
 }

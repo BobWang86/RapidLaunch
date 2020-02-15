@@ -195,7 +195,8 @@ namespace RapidLaunch.Controllers
                     });
                 }
             }
-            ViewBag.LinkedList = new SelectList(viewModel, "ID", "Name");
+            int[] selectedValues = viewModel.Where(i => i.Linked == true).Select(i => i.ID).ToArray();
+            ViewBag.LinkedList = new MultiSelectList(viewModel, "ID", "Name", selectedValues);
         }
 
         private void UpdateRocketModelLinks(string[] selectedRocketModels, Provider provider)

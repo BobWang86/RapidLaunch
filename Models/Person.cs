@@ -12,24 +12,23 @@ namespace RapidLaunch.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PersonID { get; set; }
-        [StringLength(8)]
-        public string Title { get; set; }
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Birth Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime BirthDate { get; set; }
         [Required]
-        public string Gender { get; set; }
-        [Required]
-        [Display(Name = "NIN")]
+        [Display(Name = "Insurance Number")]
         public string NationalInsuranceNumber { get; set; }
 
-        public int StaffID { get; set; }
         public Staff Staff { get; set; }
+        public int ContactID { get; set; }
         public Contact Contact { get; set; }
     }
 }

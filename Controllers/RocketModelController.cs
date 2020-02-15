@@ -22,7 +22,7 @@ namespace RapidLaunch.Controllers
         // GET: RocketModel
         public async Task<IActionResult> Index()
         {
-            var rocketModels = _context.RocketModels.Include(r => r.Manufacturer).Include(r => r.RocketCategory).AsNoTracking();
+            var rocketModels = _context.RocketModels.Include(r => r.Manufacturer).Include(r => r.RocketCategory).Include(r => r.Rockets).AsNoTracking();
             return View(await rocketModels.ToListAsync());
         }
 
@@ -159,7 +159,7 @@ namespace RapidLaunch.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RocketCreate([Bind("RocketID,ManufactureDate,ProviderID,RocketModelID,RocketStatusID")] Rocket rocket)
+        public async Task<IActionResult> RocketCreate([Bind("RocketID,RocketCode,ManufactureDate,ProviderID,RocketModelID,RocketStatusID")] Rocket rocket)
         {
             if (ModelState.IsValid)
             {
@@ -195,7 +195,7 @@ namespace RapidLaunch.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RocketEdit(int id, [Bind("RocketID,ManufactureDate,ProviderID,RocketModelID,RocketStatusID")] Rocket rocket)
+        public async Task<IActionResult> RocketEdit(int id, [Bind("RocketID,RocketCode,ManufactureDate,ProviderID,RocketModelID,RocketStatusID")] Rocket rocket)
         {
             if (id != rocket.RocketID)
             {

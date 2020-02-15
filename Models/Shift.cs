@@ -16,11 +16,11 @@ namespace RapidLaunch.Models
         public string Name { get; set; }
         [DataType(DataType.Time)]
         [Column(TypeName = "time")]
-        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = false)]
         public TimeSpan StartTime { get; set; }
         [DataType(DataType.Time)]
         [Column(TypeName = "time")]
-        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = false)]
         public TimeSpan EndTime { get; set; }
 
         public ICollection<DepartmentHistory> DepartmentHistories { get; set; }

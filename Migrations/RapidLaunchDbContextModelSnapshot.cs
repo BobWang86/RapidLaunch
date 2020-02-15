@@ -34,8 +34,6 @@ namespace RapidLaunch.Migrations
                     b.Property<string>("City")
                         .IsRequired();
 
-                    b.Property<int>("ContactID");
-
                     b.Property<string>("Country")
                         .IsRequired();
 
@@ -47,9 +45,6 @@ namespace RapidLaunch.Migrations
 
                     b.HasKey("AddressID");
 
-                    b.HasIndex("ContactID")
-                        .IsUnique();
-
                     b.ToTable("Addresses");
                 });
 
@@ -59,17 +54,17 @@ namespace RapidLaunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AddressID");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired();
-
-                    b.Property<int>("PersonID");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired();
 
                     b.HasKey("ContactID");
 
-                    b.HasIndex("PersonID")
+                    b.HasIndex("AddressID")
                         .IsUnique();
 
                     b.ToTable("Contacts");
@@ -271,10 +266,9 @@ namespace RapidLaunch.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<int>("ContactID");
 
-                    b.Property<string>("Gender")
+                    b.Property<string>("FirstName")
                         .IsRequired();
 
                     b.Property<string>("LastName")
@@ -283,14 +277,9 @@ namespace RapidLaunch.Migrations
                     b.Property<string>("NationalInsuranceNumber")
                         .IsRequired();
 
-                    b.Property<int>("StaffID");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(8);
-
                     b.HasKey("PersonID");
 
-                    b.HasIndex("StaffID")
+                    b.HasIndex("ContactID")
                         .IsUnique();
 
                     b.ToTable("People");
@@ -298,7 +287,7 @@ namespace RapidLaunch.Migrations
 
             modelBuilder.Entity("RapidLaunch.Models.Position", b =>
                 {
-                    b.Property<int>("JobTitleID")
+                    b.Property<int>("PositionID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -309,7 +298,7 @@ namespace RapidLaunch.Migrations
 
                     b.Property<int>("PayRateID");
 
-                    b.HasKey("JobTitleID");
+                    b.HasKey("PositionID");
 
                     b.HasIndex("DepartmentID");
 
@@ -345,6 +334,9 @@ namespace RapidLaunch.Migrations
 
                     b.Property<DateTime>("ManufactureDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("RocketCode")
+                        .IsRequired();
 
                     b.Property<int>("RocketModelID");
 
@@ -465,28 +457,25 @@ namespace RapidLaunch.Migrations
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("date");
 
+                    b.Property<int>("PersonID");
+
                     b.Property<int>("PositionID");
 
                     b.HasKey("StaffID");
+
+                    b.HasIndex("PersonID")
+                        .IsUnique();
 
                     b.HasIndex("PositionID");
 
                     b.ToTable("Staff");
                 });
 
-            modelBuilder.Entity("RapidLaunch.Models.Address", b =>
-                {
-                    b.HasOne("RapidLaunch.Models.Contact", "Contact")
-                        .WithOne("Address")
-                        .HasForeignKey("RapidLaunch.Models.Address", "ContactID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("RapidLaunch.Models.Contact", b =>
                 {
-                    b.HasOne("RapidLaunch.Models.Person", "Person")
+                    b.HasOne("RapidLaunch.Models.Address", "Address")
                         .WithOne("Contact")
-                        .HasForeignKey("RapidLaunch.Models.Contact", "PersonID")
+                        .HasForeignKey("RapidLaunch.Models.Contact", "AddressID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -518,7 +507,7 @@ namespace RapidLaunch.Migrations
                     b.HasOne("RapidLaunch.Models.LaunchPad", "LaunchPad")
                         .WithMany("Launches")
                         .HasForeignKey("LaunchPadID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RapidLaunch.Models.LaunchStatus", "LaunchStatus")
                         .WithMany("Launches")
@@ -528,7 +517,7 @@ namespace RapidLaunch.Migrations
                     b.HasOne("RapidLaunch.Models.Rocket", "Rocket")
                         .WithMany("Launches")
                         .HasForeignKey("RocketID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RapidLaunch.Models.LaunchPad", b =>
@@ -549,16 +538,16 @@ namespace RapidLaunch.Migrations
 
             modelBuilder.Entity("RapidLaunch.Models.Person", b =>
                 {
-                    b.HasOne("RapidLaunch.Models.Staff", "Staff")
+                    b.HasOne("RapidLaunch.Models.Contact", "Contact")
                         .WithOne("Person")
-                        .HasForeignKey("RapidLaunch.Models.Person", "StaffID")
+                        .HasForeignKey("RapidLaunch.Models.Person", "ContactID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RapidLaunch.Models.Position", b =>
                 {
                     b.HasOne("RapidLaunch.Models.Department", "Department")
-                        .WithMany("JobTitles")
+                        .WithMany("Positions")
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -609,6 +598,11 @@ namespace RapidLaunch.Migrations
 
             modelBuilder.Entity("RapidLaunch.Models.Staff", b =>
                 {
+                    b.HasOne("RapidLaunch.Models.Person", "Person")
+                        .WithOne("Staff")
+                        .HasForeignKey("RapidLaunch.Models.Staff", "PersonID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("RapidLaunch.Models.Position", "Position")
                         .WithMany("Staff")
                         .HasForeignKey("PositionID")

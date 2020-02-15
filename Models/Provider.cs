@@ -17,7 +17,7 @@ namespace RapidLaunch.Models
         public string Description { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         [Display(Name = "Date Established")]
         public DateTime? EstablishDate { get; set; }
 

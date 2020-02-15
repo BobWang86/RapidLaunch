@@ -32,6 +32,7 @@ namespace RapidLaunch.Data
         public DbSet<RocketStatus> RocketStatuses { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Staff> Staff { get; set; }
+        public DbQuery<LaunchHistory> LaunchHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,12 +49,22 @@ namespace RapidLaunch.Data
             modelBuilder.Entity<Launch>()
                 .HasOne(l => l.Rocket)
                 .WithMany(r => r.Launches)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Launch>()
                 .HasOne(l => l.LaunchPad)
                 .WithMany(l => l.Launches)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<LaunchPad>()
+                .HasMany(p => p.Launches)
+                .WithOne(l => l.LaunchPad)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Rocket>()
+                .HasMany(r => r.Launches)
+                .WithOne(l => l.Rocket)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DepartmentHistory>()
                 .HasOne(d => d.Staff)
@@ -78,6 +89,8 @@ namespace RapidLaunch.Data
 
             modelBuilder.Entity<RocketModelLink>()
                 .HasKey(o => new { o.ProviderID, o.RocketModelID });
+
+            modelBuilder.Query<LaunchHistory>().ToView("LaunchHistoryByYear");
         }
     }
 }

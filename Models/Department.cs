@@ -17,7 +17,7 @@ namespace RapidLaunch.Models
         [Required]
         public string GroupName { get; set; }
 
-        public ICollection<Position> JobTitles { get; set; }
+        public ICollection<Position> Positions { get; set; }
         public ICollection<DepartmentHistory> DepartmentHistories { get; set; }
     }
 }

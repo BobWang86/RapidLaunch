@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Launch</h4>
+<h3>Edit Launch</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -45,14 +43,11 @@
                 <span asp-validation-for="LaunchStatusID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Manage" class="btn btn-info">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

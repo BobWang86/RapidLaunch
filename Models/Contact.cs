@@ -19,9 +19,8 @@ namespace RapidLaunch.Models
         [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
 
-        [ForeignKey("Person")]
-        public int PersonID { get; set; }
         public Person Person { get; set; }
+        public int AddressID { get; set; }
         public Address Address { get; set; }
     }
 }

@@ -1,0 +1,97 @@
+﻿@model RapidLaunch.Models.ViewModels.DepartmentVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h4>Executive Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.ExecutiveStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Web Design Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.WebDesignStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Software Engineering Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.SoftwareEngineeringStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Marketing Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.MarketingStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Sales Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.SalesStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Finance Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.FinanceStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Human Resources Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.HumanResourcesStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Information Services Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.InformationServicesStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Document Control Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.DocumentControlStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+
+<h4>Quality Assurance Department</h4>
+<hr>
+<div class="row">
+    @foreach (var item in Model.QualityAssuranceStaff)
+    {
+        @await Html.PartialAsync("StaffCardPartial", item)
+    }
+</div>
+

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
+using RapidLaunch.Models.ViewModels;
 
 namespace RapidLaunch.Controllers
 {
@@ -22,30 +23,50 @@ namespace RapidLaunch.Controllers
         // GET: Launch
         public async Task<IActionResult> Index()
         {
-            var rapidLaunchDbContext = _context.Launches.Include(l => l.LaunchOrbit).Include(l => l.LaunchPad).Include(l => l.LaunchStatus).Include(l => l.Rocket);
-            return View(await rapidLaunchDbContext.ToListAsync());
-        }
+            LaunchVM viewModel = new LaunchVM();
+            List<Launch> futureLaunches = await _context.Launches
+                .Include(l => l.Rocket).ThenInclude(r => r.RocketModel).ThenInclude(r => r.RocketModelLinks)
+                .Include(l => l.LaunchPad)
+                .Include(l => l.LaunchOrbit)
+                .Include(l => l.LaunchStatus)
+                .ToListAsync();
+            viewModel.Launches = new List<RocketLaunchVM>();
 
-        // GET: Launch/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            foreach (var launch in futureLaunches)
             {
-                return NotFound();
+                List<RocketModelLink> links = launch.Rocket.RocketModel.RocketModelLinks.ToList();
+                string providerName = "";
+                if (links.Count != 0)
+                {
+                    int providerID = links.FirstOrDefault().ProviderID;
+                    providerName = _context.Providers.FirstOrDefault(p => p.ProviderID == providerID).Name;
+                }
+
+                viewModel.Launches.Add(new RocketLaunchVM
+                {
+                    LaunchDate = launch.LaunchDate,
+                    LaunchTime = launch.LaunchTime,
+                    Provider = providerName,
+                    Rocket = launch.Rocket.RocketModel.Name,
+                    LaunchPad = launch.LaunchPad.LaunchPadCode,
+                    LaunchOrbit = launch.LaunchOrbit.Name,
+                    LaunchStatus = launch.LaunchStatus.Name
+                });
             }
 
-            var launch = await _context.Launches
+            return View(viewModel);
+        }
+
+        // GET: Launch/Manage
+        public async Task<IActionResult> Manage()
+        {
+            var allLaunches = _context.Launches
                 .Include(l => l.LaunchOrbit)
                 .Include(l => l.LaunchPad)
                 .Include(l => l.LaunchStatus)
                 .Include(l => l.Rocket)
-                .FirstOrDefaultAsync(m => m.LaunchID == id);
-            if (launch == null)
-            {
-                return NotFound();
-            }
-
-            return View(launch);
+                    .ThenInclude(r => r.RocketModel);
+            return View(await allLaunches.ToListAsync());
         }
 
         // GET: Launch/Create
@@ -54,7 +75,7 @@ namespace RapidLaunch.Controllers
             ViewData["LaunchOrbitID"] = new SelectList(_context.LaunchOrbits, "LaunchOrbitID", "Name");
             ViewData["LaunchPadID"] = new SelectList(_context.LaunchPads, "LaunchPadID", "LaunchPadCode");
             ViewData["LaunchStatusID"] = new SelectList(_context.LaunchStatuses, "LaunchStatusID", "Name");
-            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketID");
+            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketCode");
             return View();
         }
 
@@ -69,12 +90,12 @@ namespace RapidLaunch.Controllers
             {
                 _context.Add(launch);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             ViewData["LaunchOrbitID"] = new SelectList(_context.LaunchOrbits, "LaunchOrbitID", "Name", launch.LaunchOrbitID);
             ViewData["LaunchPadID"] = new SelectList(_context.LaunchPads, "LaunchPadID", "LaunchPadCode", launch.LaunchPadID);
             ViewData["LaunchStatusID"] = new SelectList(_context.LaunchStatuses, "LaunchStatusID", "Name", launch.LaunchStatusID);
-            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketID", launch.RocketID);
+            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketCode", launch.RocketID);
             return View(launch);
         }
 
@@ -94,7 +115,7 @@ namespace RapidLaunch.Controllers
             ViewData["LaunchOrbitID"] = new SelectList(_context.LaunchOrbits, "LaunchOrbitID", "Name", launch.LaunchOrbitID);
             ViewData["LaunchPadID"] = new SelectList(_context.LaunchPads, "LaunchPadID", "LaunchPadCode", launch.LaunchPadID);
             ViewData["LaunchStatusID"] = new SelectList(_context.LaunchStatuses, "LaunchStatusID", "Name", launch.LaunchStatusID);
-            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketID", launch.RocketID);
+            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketCode", launch.RocketID);
             return View(launch);
         }
 
@@ -128,12 +149,12 @@ namespace RapidLaunch.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             ViewData["LaunchOrbitID"] = new SelectList(_context.LaunchOrbits, "LaunchOrbitID", "Name", launch.LaunchOrbitID);
             ViewData["LaunchPadID"] = new SelectList(_context.LaunchPads, "LaunchPadID", "LaunchPadCode", launch.LaunchPadID);
             ViewData["LaunchStatusID"] = new SelectList(_context.LaunchStatuses, "LaunchStatusID", "Name", launch.LaunchStatusID);
-            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketID", launch.RocketID);
+            ViewData["RocketID"] = new SelectList(_context.Rockets, "RocketID", "RocketCode", launch.RocketID);
             return View(launch);
         }
 
@@ -167,7 +188,7 @@ namespace RapidLaunch.Controllers
             var launch = await _context.Launches.FindAsync(id);
             _context.Launches.Remove(launch);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Manage));
         }
 
         private bool LaunchExists(int id)

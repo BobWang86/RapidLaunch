@@ -5,14 +5,18 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h1>Edit</h1>
-<h4>Rocket</h4>
+<h3>Edit Rocket</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="RocketEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="RocketID" />
+            <div class="form-group">
+                <label asp-for="RocketCode" class="control-label"></label>
+                <input asp-for="RocketCode" class="form-control" />
+                <span asp-validation-for="RocketCode" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="ManufactureDate" class="control-label"></label>
                 <input asp-for="ManufactureDate" class="form-control" />

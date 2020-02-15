@@ -17,7 +17,7 @@ namespace RapidLaunch.Models
         public Point Location { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime BuildDate { get; set; }
 
         public ICollection<LaunchPad> LaunchPads { get; set; }

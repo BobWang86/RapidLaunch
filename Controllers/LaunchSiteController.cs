@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
+using NetTopologySuite.Geometries;
 
 namespace RapidLaunch.Controllers
 {
@@ -25,22 +26,10 @@ namespace RapidLaunch.Controllers
             return View(await _context.LaunchSites.ToListAsync());
         }
 
-        // GET: LaunchSite/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: LaunchSite/Manage
+        public async Task<IActionResult> Manage()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var launchSite = await _context.LaunchSites
-                .FirstOrDefaultAsync(m => m.LaunchSiteID == id);
-            if (launchSite == null)
-            {
-                return NotFound();
-            }
-
-            return View(launchSite);
+            return View(await _context.LaunchSites.ToListAsync());
         }
 
         // GET: LaunchSite/Create
@@ -50,17 +39,16 @@ namespace RapidLaunch.Controllers
         }
 
         // POST: LaunchSite/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LaunchSiteID,Country,Name,Location,BuildDate")] LaunchSite launchSite)
+        public async Task<IActionResult> Create([Bind("LaunchSiteID,Country,Name,BuildDate")] LaunchSite launchSite, double longitude, double latitude)
         {
             if (ModelState.IsValid)
             {
+                launchSite.Location = new Point(longitude, latitude) { SRID = 4326 };
                 _context.Add(launchSite);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             return View(launchSite);
         }
@@ -82,11 +70,9 @@ namespace RapidLaunch.Controllers
         }
 
         // POST: LaunchSite/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LaunchSiteID,Country,Name,Location,BuildDate")] LaunchSite launchSite)
+        public async Task<IActionResult> Edit(int id, [Bind("LaunchSiteID,Country,Name,BuildDate")] LaunchSite launchSite, double longitude, double latitude)
         {
             if (id != launchSite.LaunchSiteID)
             {
@@ -95,6 +81,7 @@ namespace RapidLaunch.Controllers
 
             if (ModelState.IsValid)
             {
+                launchSite.Location = new Point(longitude, latitude) { SRID = 4326 };
                 try
                 {
                     _context.Update(launchSite);
@@ -111,7 +98,7 @@ namespace RapidLaunch.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             return View(launchSite);
         }
@@ -142,12 +129,123 @@ namespace RapidLaunch.Controllers
             var launchSite = await _context.LaunchSites.FindAsync(id);
             _context.LaunchSites.Remove(launchSite);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Manage));
+        }
+
+        // GET: LaunchPad/Create
+        public IActionResult PadCreate(int id)
+        {
+            LaunchSite selectedSite = _context.LaunchSites.FirstOrDefault(s => s.LaunchSiteID == id);
+            ViewData["LaunchSite"] = selectedSite;
+            ViewData["ExistingLaunchPads"] = _context.LaunchPads.Where(p => p.LaunchSiteID == id).Include(p => p.LaunchSite).ToList();
+            ViewData["LaunchSiteID"] = new SelectList(_context.LaunchSites, "LaunchSiteID", "Name", selectedSite.LaunchSiteID);
+            return View();
+        }
+
+        // POST: LaunchPad/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PadCreate([Bind("LaunchPadID,LaunchPadCode,LaunchSiteID")] LaunchPad launchPad)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(launchPad);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(PadCreate), new { id = launchPad.LaunchSiteID });
+            }
+            ViewData["LaunchSiteID"] = new SelectList(_context.LaunchSites, "LaunchSiteID", "Name", launchPad.LaunchSiteID);
+            return View(launchPad);
+        }
+
+        // GET: LaunchPad/Edit/5
+        public async Task<IActionResult> PadEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var launchPad = await _context.LaunchPads.FindAsync(id);
+            if (launchPad == null)
+            {
+                return NotFound();
+            }
+            ViewData["LaunchSiteID"] = new SelectList(_context.LaunchSites, "LaunchSiteID", "LaunchSiteID", launchPad.LaunchSiteID);
+            return View(launchPad);
+        }
+
+        // POST: LaunchPad/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PadEdit(int id, [Bind("LaunchPadID,LaunchPadCode,LaunchSiteID")] LaunchPad launchPad)
+        {
+            if (id != launchPad.LaunchPadID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(launchPad);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LaunchPadExists(launchPad.LaunchPadID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(PadCreate), new { id = launchPad.LaunchSiteID });
+            }
+            ViewData["LaunchSiteID"] = new SelectList(_context.LaunchSites, "LaunchSiteID", "LaunchSiteID", launchPad.LaunchSiteID);
+            return View(launchPad);
+        }
+
+        // GET: LaunchPad/Delete/5
+        public async Task<IActionResult> PadDelete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var launchPad = await _context.LaunchPads
+                .Include(l => l.LaunchSite)
+                .FirstOrDefaultAsync(m => m.LaunchPadID == id);
+            if (launchPad == null)
+            {
+                return NotFound();
+            }
+
+            return View(launchPad);
+        }
+
+        // POST: LaunchPad/Delete/5
+        [HttpPost, ActionName("PadDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PadDeleteConfirmed(int id)
+        {
+            var launchPad = await _context.LaunchPads.FindAsync(id);
+            _context.LaunchPads.Remove(launchPad);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(PadCreate), new { id = launchPad.LaunchSiteID });
         }
 
         private bool LaunchSiteExists(int id)
         {
             return _context.LaunchSites.Any(e => e.LaunchSiteID == id);
+        }
+
+        private bool LaunchPadExists(int id)
+        {
+            return _context.LaunchPads.Any(e => e.LaunchPadID == id);
         }
     }
 }

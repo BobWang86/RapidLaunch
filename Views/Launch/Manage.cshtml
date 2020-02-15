@@ -1,0 +1,124 @@
+﻿@model IEnumerable<RapidLaunch.Models.Launch>
+
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Rocket Launches</h4>
+    </div>
+    <div class="col-md-6">
+        <a asp-action="Create" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Create New</a>
+    </div>
+</div>
+<hr>
+<section class="wrapper">
+    <div class="row mb">
+        <!-- page start-->
+        <div class="content-panel">
+            <div class="adv-table">
+                <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="hidden-table-info">
+                    <thead>
+                        <tr>
+                            <th>
+                                Launch Date
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Rocket.RocketModel)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LaunchPad)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LaunchOrbit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LaunchStatus)
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            string status = item.LaunchStatus.Name;
+                            string css = "";
+
+                            switch (status)
+                            {
+                                case "Success":
+                                    css = "gradeA";
+                                    break;
+                                case "Failure":
+                                    css = "gradeX";
+                                    break;
+                                case "Scheduled":
+                                    css = "gradeC";
+                                    break;
+                                default:
+                                    css = "gradeU";
+                                    break;
+                            }
+
+                            <tr class=@css>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LaunchDate)  @Html.DisplayFor(modelItem => item.LaunchTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Rocket.RocketModel.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LaunchPad.LaunchPadCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LaunchOrbit.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LaunchStatus.Name)
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs tooltips" data-placement="left" data-original-title="Edit" asp-action="Edit" asp-route-id=@item.LaunchID><i class="fa fa-pencil"></i></a>
+                                    <a class="btn btn-danger btn-xs tooltips" data-placement="left" data-original-title="Delete" asp-action="Delete" asp-route-id=@item.LaunchID><i class="fa fa-trash-o "></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- page end-->
+    </div>
+</section>
+
+<script type="text/javascript">
+    /* Formating function for row details */
+    function fnFormatDetails(oTable, nTr) {
+        var aData = oTable.fnGetData(nTr);
+        var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+        sOut += '<tr><td>Rendering engine:</td><td>' + aData[1] + ' ' + aData[4] + '</td></tr>';
+        sOut += '<tr><td>Link to source:</td><td>Could provide a link here</td></tr>';
+        sOut += '<tr><td>Extra info:</td><td>And any further details here (images etc)</td></tr>';
+        sOut += '</table>';
+
+        return sOut;
+    }
+
+    $(document).ready(function () {
+        /*
+        * Initialse DataTables, with no sorting on the 'details' column
+        */
+        var oTable = $('#hidden-table-info').dataTable({
+            "aoColumnDefs": [{
+                "bSortable": false,
+                "aTargets": [0]
+            }],
+            "aaSorting": [
+                [1, 'asc']
+            ]
+        });
+    });
+</script>
