@@ -14,10 +14,15 @@ namespace RapidLaunch.Data
     {
         public static void Initialize(IApplicationBuilder app)
         {
+            // Get DbContext From IApplicationBuilder
             RapidLaunchDbContext context = app.ApplicationServices.GetRequiredService<RapidLaunchDbContext>();
+            // Initialize Bogus Faker
             var faker = new Faker("en");
             context.Database.EnsureCreated();
+
+            // Seed data to the rocket-related tables. 
             #region RocketDB Initializer
+            // Create new Manufacturers
             if (!context.Manufacturers.Any())
             {
                 context.Manufacturers.AddRange(
@@ -164,6 +169,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new RocketCategories
             if (!context.RocketCategories.Any())
             {
                 context.RocketCategories.AddRange(
@@ -190,6 +197,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new Providers
             if (!context.Providers.Any())
             {
                 context.Providers.AddRange(
@@ -268,6 +277,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new RocketModels with Foreign Keys On Manufacturer and RocketCategory
             if (!context.RocketModels.Any())
             {
                 context.RocketModels.AddRange(
@@ -538,6 +549,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new RocketModelLinks that link RocketModels with Providers
             if (!context.RocketModelLinks.Any())
             {
                 context.RocketModelLinks.AddRange(
@@ -652,6 +665,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new RocketStatuses
             if (!context.RocketStatuses.Any())
             {
                 context.RocketStatuses.AddRange(
@@ -674,6 +689,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create a number of Rockets out of each RocketModel
             if (!context.Rockets.Any())
             {
                 HashSet<int> rocketModelList = new HashSet<int>(context.RocketModels.Select(r => r.RocketModelID));
@@ -682,7 +699,7 @@ namespace RapidLaunch.Data
                 {
                     string rocketModelName = context.RocketModels.FirstOrDefault(r => r.RocketModelID == modelID).Name;
 
-                    for (int i = 1; i <= 3; i++)
+                    for (int i = 1; i <= faker.Random.Number(1, 5); i++)
                     {
                         context.Rockets.Add(new Rocket {
                             ManufactureDate = faker.Date.Between(new DateTime(1945, 01, 01), DateTime.Now),
@@ -694,6 +711,8 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+
+            // Create LaunchSite with spatial data as new Point({Longitude}, {Latitude}) { SRID = 4326 }
             if (!context.LaunchSites.Any())
             {
                 context.LaunchSites.AddRange(
@@ -889,6 +908,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new LaunchOrbits
             if (!context.LaunchOrbits.Any())
             {
                 context.LaunchOrbits.AddRange(
@@ -945,6 +966,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create new LaunchStatuses
             if (!context.LaunchStatuses.Any())
             {
                 context.LaunchStatuses.AddRange(
@@ -975,6 +998,8 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
+            // Create a number of new LaunchPads at each LaunchSite
             if (!context.LaunchPads.Any())
             {
                 HashSet<int> launchSiteList = new HashSet<int>(context.LaunchSites.Select(s => s.LaunchSiteID));
@@ -991,6 +1016,8 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+
+            // Create a large number of random Rocket Launches
             if (!context.Launches.Any())
             {
                 HashSet<int> rocketList = new HashSet<int>(context.Rockets.Select(r => r.RocketID));
@@ -1001,12 +1028,12 @@ namespace RapidLaunch.Data
                 int launchStatus = 0;
                 int launchStatusScheduled = context.LaunchStatuses.FirstOrDefault(s => s.Name == "Scheduled").LaunchStatusID;
                 int launchStatusSuccess = context.LaunchStatuses.FirstOrDefault(s => s.Name == "Success").LaunchStatusID;
-                for (int i = 0; i < faker.Random.Number(75, 95); i++)
+                for (int i = 0; i < faker.Random.Number(55, 75); i++)
                 {
                     launchStatusList.Add(launchStatusSuccess);
                 }
 
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 500; i++)
                 {
                     int rocket = faker.PickRandom<int>(rocketList);
                     int launchPad = faker.PickRandom<int>(launchPadList);
@@ -1042,6 +1069,7 @@ namespace RapidLaunch.Data
             context.SaveChanges();
             #endregion
 
+            // Seed data to the staff-related tables. 
             #region StaffDB Initializer
             if (!context.Shifts.Any())
             {
@@ -1067,6 +1095,7 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
             if (!context.PayRates.Any())
             {
                 for (int i = 1; i <= 8; i++)
@@ -1080,6 +1109,7 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+
             if (!context.Departments.Any())
             {
                 context.Departments.AddRange(
@@ -1136,6 +1166,7 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
             if (!context.Positions.Any())
             {
                 context.Positions.AddRange(
@@ -1285,9 +1316,10 @@ namespace RapidLaunch.Data
                 );
             }
             context.SaveChanges();
+
             if (!context.Addresses.Any())
             {
-                for (int i = 1; i <= 32; i++)
+                for (int i = 1; i <= 48; i++)
                 {
                     context.Addresses.Add(
                         new Address { 
@@ -1302,9 +1334,10 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+
             if (!context.Contacts.Any())
             {
-                for (int i = 1; i <= 32; i++)
+                for (int i = 1; i <= 48; i++)
                 {
                     context.Contacts.Add(
                         new Contact { 
@@ -1316,9 +1349,10 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+
             if (!context.People.Any())
             {
-                for (int i = 1; i <= 32; i++)
+                for (int i = 1; i <= 48; i++)
                 {
                     context.People.Add(
                         new RapidLaunch.Models.Person { 
@@ -1332,6 +1366,7 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
+
             if (!context.Staff.Any())
             {
                 List<int> positions = context.Positions.Select(i => i.PositionID).ToList();
@@ -1362,7 +1397,6 @@ namespace RapidLaunch.Data
                 }
             }
             context.SaveChanges();
-
             #endregion
 
         }

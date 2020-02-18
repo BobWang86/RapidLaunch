@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
+using RapidLaunch.Models.Repository;
 using RapidLaunch.Models.ViewModels;
 
 namespace RapidLaunch.Controllers
@@ -14,10 +16,12 @@ namespace RapidLaunch.Controllers
     public class ProviderController : Controller
     {
         private readonly RapidLaunchDbContext _context;
+        private readonly ILogger _log;
 
-        public ProviderController(RapidLaunchDbContext context)
+        public ProviderController(RapidLaunchDbContext context, ILogger<ProviderController> log)
         {
             _context = context;
+            _log = log;
         }
 
         // GET: Provider
@@ -27,8 +31,8 @@ namespace RapidLaunch.Controllers
             viewModel.Providers = await _context.Providers
                 .Include(i => i.RocketModelLinks)
                     .ThenInclude(i => i.RocketModel)
-                    .AsNoTracking()
-                    .ToListAsync();
+                .AsNoTracking()
+                .ToListAsync();
             return View(viewModel);
         }
 
@@ -39,8 +43,8 @@ namespace RapidLaunch.Controllers
             viewModel.Providers = await _context.Providers
                 .Include(i => i.RocketModelLinks)
                     .ThenInclude(i => i.RocketModel)
-                    .AsNoTracking()
-                    .ToListAsync();
+                .AsNoTracking()
+                .ToListAsync();
 
             return View(viewModel);
         }
@@ -53,8 +57,6 @@ namespace RapidLaunch.Controllers
         }
 
         // POST: Provider/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProviderID,Name,Description,EstablishDate")] Provider provider, string[] selectedRocketModels)
@@ -82,6 +84,7 @@ namespace RapidLaunch.Controllers
         // GET: Provider/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            _log.LogInformation("Loading provider with id {ProviderID}", id);
             if (id == null)
             {
                 return NotFound();
@@ -94,6 +97,7 @@ namespace RapidLaunch.Controllers
 
             if (provider == null)
             {
+                _log.LogError("Could not find provider with id {ProviderID} when attempting to edit", id);
                 return NotFound();
             }
             GetRocketModelLinks(id);
@@ -121,9 +125,9 @@ namespace RapidLaunch.Controllers
                 {
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateException /* ex */)
+                catch (DbUpdateException ex)
                 {
-                    //Log the error (uncomment ex variable name and write a log.)
+                    _log.LogError(ex, "Could not update provider with id {ProviderID}", id);
                 }
                 return RedirectToAction(nameof(Manage));
             }
@@ -135,6 +139,7 @@ namespace RapidLaunch.Controllers
         // GET: Provider/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            _log.LogInformation("Loading provider with id {ProviderID}", id);
             if (id == null)
             {
                 return NotFound();
@@ -144,6 +149,7 @@ namespace RapidLaunch.Controllers
                 .FirstOrDefaultAsync(m => m.ProviderID == id);
             if (provider == null)
             {
+                _log.LogError("Could not find provider with id {ProviderID} when attempting to delete", id);
                 return NotFound();
             }
             return View(provider);

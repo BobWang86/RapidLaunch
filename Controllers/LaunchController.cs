@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
 using RapidLaunch.Models.ViewModels;
@@ -14,10 +15,12 @@ namespace RapidLaunch.Controllers
     public class LaunchController : Controller
     {
         private readonly RapidLaunchDbContext _context;
+        private readonly ILogger _log;
 
-        public LaunchController(RapidLaunchDbContext context)
+        public LaunchController(RapidLaunchDbContext context, ILogger<LaunchController> log)
         {
             _context = context;
+            _log = log;
         }
 
         // GET: Launch
@@ -29,6 +32,7 @@ namespace RapidLaunch.Controllers
                 .Include(l => l.LaunchPad)
                 .Include(l => l.LaunchOrbit)
                 .Include(l => l.LaunchStatus)
+                .AsNoTracking()
                 .ToListAsync();
             viewModel.Launches = new List<RocketLaunchVM>();
 
@@ -65,7 +69,8 @@ namespace RapidLaunch.Controllers
                 .Include(l => l.LaunchPad)
                 .Include(l => l.LaunchStatus)
                 .Include(l => l.Rocket)
-                    .ThenInclude(r => r.RocketModel);
+                    .ThenInclude(r => r.RocketModel)
+                .AsNoTracking();
             return View(await allLaunches.ToListAsync());
         }
 

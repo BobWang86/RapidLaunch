@@ -8,28 +8,31 @@ using Microsoft.EntityFrameworkCore;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
 using NetTopologySuite.Geometries;
+using Microsoft.Extensions.Logging;
 
 namespace RapidLaunch.Controllers
 {
     public class LaunchSiteController : Controller
     {
         private readonly RapidLaunchDbContext _context;
+        private readonly ILogger _log;
 
-        public LaunchSiteController(RapidLaunchDbContext context)
+        public LaunchSiteController(RapidLaunchDbContext context, ILogger<LaunchSiteController> log)
         {
             _context = context;
+            _log = log;
         }
 
         // GET: LaunchSite
         public async Task<IActionResult> Index()
         {
-            return View(await _context.LaunchSites.ToListAsync());
+            return View(await _context.LaunchSites.AsNoTracking().ToListAsync());
         }
 
         // GET: LaunchSite/Manage
         public async Task<IActionResult> Manage()
         {
-            return View(await _context.LaunchSites.ToListAsync());
+            return View(await _context.LaunchSites.AsNoTracking().ToListAsync());
         }
 
         // GET: LaunchSite/Create

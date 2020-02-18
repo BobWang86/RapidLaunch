@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
 using RapidLaunch.Models.ViewModels;
@@ -14,10 +15,12 @@ namespace RapidLaunch.Controllers
     public class StaffController : Controller
     {
         private readonly RapidLaunchDbContext _context;
+        private readonly ILogger _log;
 
-        public StaffController(RapidLaunchDbContext context)
+        public StaffController(RapidLaunchDbContext context, ILogger<StaffController> log)
         {
             _context = context;
+            _log = log;
         }
 
         // GET: Staff
@@ -28,6 +31,7 @@ namespace RapidLaunch.Controllers
                     .ThenInclude(p => p.Contact)
                 .Include(s => s.Position)
                     .ThenInclude(p => p.Department)
+                .AsNoTracking()
                 .ToListAsync();
             var viewModel = new DepartmentVM
             {
@@ -58,6 +62,7 @@ namespace RapidLaunch.Controllers
                         .ThenInclude(c => c.Address)
                 .Include(s => s.Position)
                     .ThenInclude(p => p.Department)
+                .AsNoTracking()
                 .ToListAsync();
             return View(staff);
         }
@@ -67,7 +72,7 @@ namespace RapidLaunch.Controllers
         {
             ViewData["PersonID"] = new SelectList(_context.People.Where(p => p.Staff == null), "PersonID", "FirstName");
             ViewData["PositionID"] = new SelectList(_context.Positions, "PositionID", "Name");
-            List<PersonVM> people = _context.People
+            List<PersonVM> staff = _context.People.Where(p => p.Staff != null)
                 .Include(p => p.Contact)
                     .ThenInclude(c => c.Address)
                 .Select(p => new PersonVM
@@ -87,7 +92,29 @@ namespace RapidLaunch.Controllers
                     PostalCode = p.Contact.Address.PostalCode,
                     Hired = p.Staff == null ? false : true
                 }).ToList();
-            ViewData["ExistingPeople"] = people;
+
+            List<PersonVM> candidate = _context.People.Where(p => p.Staff == null)
+                .Include(p => p.Contact)
+                    .ThenInclude(c => c.Address)
+                .Select(p => new PersonVM
+                {
+                    PersonID = p.PersonID,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    BirthDate = p.BirthDate,
+                    NationalInsuranceNumber = p.NationalInsuranceNumber,
+                    PhoneNumber = p.Contact.PhoneNumber,
+                    EmailAddress = p.Contact.EmailAddress,
+                    AddressLine1 = p.Contact.Address.AddressLine1,
+                    AddressLine2 = p.Contact.Address.AddressLine2,
+                    City = p.Contact.Address.City,
+                    State = p.Contact.Address.State,
+                    Country = p.Contact.Address.Country,
+                    PostalCode = p.Contact.Address.PostalCode,
+                    Hired = p.Staff == null ? false : true
+                }).ToList();
+            ViewData["Staff"] = staff;
+            ViewData["Candidate"] = candidate;
 
             return View();
         }
@@ -101,7 +128,7 @@ namespace RapidLaunch.Controllers
             {
                 _context.Add(staff);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             ViewData["PersonID"] = new SelectList(_context.People, "PersonID", "FirstName", staff.PersonID);
             ViewData["PositionID"] = new SelectList(_context.Positions, "PositionID", "Name", staff.PositionID);
@@ -154,7 +181,7 @@ namespace RapidLaunch.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             ViewData["PersonID"] = new SelectList(_context.People, "PersonID", "FirstName", staff.PersonID);
             ViewData["PositionID"] = new SelectList(_context.Positions, "PositionID", "Name", staff.PositionID);
@@ -189,7 +216,7 @@ namespace RapidLaunch.Controllers
             var staff = await _context.Staff.FindAsync(id);
             _context.Staff.Remove(staff);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Manage));
         }
 
         private bool StaffExists(int id)

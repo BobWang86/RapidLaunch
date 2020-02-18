@@ -8,15 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using RapidLaunch.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RapidLaunch.Models.Repository;
 
 namespace RapidLaunch
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -82,6 +80,7 @@ namespace RapidLaunch
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            // Initialize the database with data seeding
             RapidLaunchDbInitializer.Initialize(app);
         }
     }

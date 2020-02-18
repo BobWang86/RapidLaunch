@@ -5,18 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RapidLaunch.Data;
 using RapidLaunch.Models;
+using RapidLaunch.Models.Repository;
 
 namespace RapidLaunch.Controllers
 {
     public class RocketModelController : Controller
     {
         private readonly RapidLaunchDbContext _context;
+        private readonly ILogger _log;
 
-        public RocketModelController(RapidLaunchDbContext context)
+        public RocketModelController(RapidLaunchDbContext context, ILogger<RocketModelController> log)
         {
             _context = context;
+            _log = log;
         }
 
         // GET: RocketModel

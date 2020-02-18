@@ -48,68 +48,7 @@
         *********************************************************************************************************************************************************** -->
         <!--sidebar start-->
         <aside>
-            <div id="sidebar" class="nav-collapse ">
-                <!-- sidebar menu start-->
-                <ul class="sidebar-menu" id="nav-accordion">
-                    <li class="mt">
-                        <a class="active" asp-area="" asp-controller="Home" asp-action="Index">
-                            <i class="fa fa-dashboard"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="sub-menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-github-alt"></i>
-                            <span>Providers</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a asp-area="" asp-controller="Provider" asp-action="Index">View Providers</a></li>
-                            <li><a asp-area="" asp-controller="Provider" asp-action="Manage">Manage Providers</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-rocket"></i>
-                            <span>Rockets</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a asp-area="" asp-controller="RocketModel" asp-action="Index">View Rockets</a></li>
-                            <li><a asp-area="" asp-controller="RocketModel" asp-action="Manage">Manage Rockets</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-calendar"></i>
-                            <span>Launches</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a asp-area="" asp-controller="Launch" asp-action="Index">View Launches</a></li>
-                            <li><a asp-area="" asp-controller="Launch" asp-action="Manage">Manage Launches</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-map-marker"></i>
-                            <span>Launch Sites</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a asp-area="" asp-controller="LaunchSite" asp-action="Index">View Launch Sites</a></li>
-                            <li><a asp-area="" asp-controller="LaunchSite" asp-action="Manage">Manage Launch Sites</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-group"></i>
-                            <span>Staff</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a a asp-area="" asp-controller="Staff" asp-action="Index">View Staff</a></li>
-                            <li><a a asp-area="" asp-controller="Staff" asp-action="Manage">Manage Staff</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- sidebar menu end-->
-            </div>
+            @await Component.InvokeAsync("NavBar")
         </aside>
         <!--sidebar end-->
         <!-- **********************************************************************************************************************************************************

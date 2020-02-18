@@ -56,10 +56,9 @@
                                     @Html.DisplayFor(modelItem => item.Position.Department.Name)
                                 </td>
                                 <td>
-                                    @*<a class="btn btn-success btn-xs tooltips" data-placement="left" data-original-title="View Contact Details" asp-action="CreateContact" asp-route-id=@item.StaffID><i class="fa fa-phone-square"></i></a>*@
                                     <a class="btn btn-success btn-xs tooltips" data-placement="left" data-original-title="View Contact Details" data-toggle="modal" data-target="#staff-@item.PersonID"><i class="fa fa-phone-square"></i></a>
-                                    <a class="btn btn-primary btn-xs tooltips" data-placement="left" data-original-title="Edit" asp-action="EditContack" asp-route-id=@item.StaffID><i class="fa fa-pencil"></i></a>
-                                    <a class="btn btn-danger btn-xs tooltips" data-placement="left" data-original-title="Delete" asp-action="DeleteContack" asp-route-id=@item.StaffID><i class="fa fa-trash-o "></i></a>
+                                    <a class="btn btn-primary btn-xs tooltips" data-placement="left" data-original-title="Edit" asp-action="Edit" asp-route-id=@item.StaffID><i class="fa fa-pencil"></i></a>
+                                    <a class="btn btn-danger btn-xs tooltips" data-placement="left" data-original-title="Delete" asp-action="Delete" asp-route-id=@item.StaffID><i class="fa fa-trash-o "></i></a>
                                 </td>
                             </tr>
                         }

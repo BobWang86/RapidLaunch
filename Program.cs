@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace RapidLaunch
 {
@@ -19,7 +20,16 @@ namespace RapidLaunch
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration(config => config.AddJsonFile("appsettings.json"))
+                .ConfigureLogging((ctx, builder) =>
+                {
+                    builder.AddConfiguration(
+                    ctx.Configuration.GetSection("Logging"));
+                    builder.AddConsole();
+                })
                 .UseStartup<Startup>()
+                .ConfigureLogging(builder =>  builder.AddConsole())
                 .UseDefaultServiceProvider(options => options.ValidateScopes = false);
     }
 }

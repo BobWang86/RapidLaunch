@@ -91,21 +91,26 @@
 
             var years = [];
             data.forEach(function (value) {
-                years.push(value.launchYear)
+                years.push({ launchYear: value.launchYear })
             });
+            console.log(data);
+            console.log(years);
 
             Morris.Line({
                 element: 'morris-area',
                 data: data,
                 xkey: 'launchYear',
+                xLabels: 'year',
                 ykeys: ['success', 'failure', 'abort'],
                 labels: ['success', 'failure', 'abort'],
+                parseTime: false,
                 hideHover: 'auto',
-                lineWidth: 1,
-                pointSize: 5,
-                lineColors: ['#4a8bc2', '#ff6c60', '#a9d86e'],
+                lineWidth: 2,
+                pointSize: 6,
+                lineColors: ['#4a8bc2', '#797979', '#a9d86e'],
                 fillOpacity: 0.5,
-                smooth: true
+                smooth: true,
+                resize: true
               });
         });
     });
