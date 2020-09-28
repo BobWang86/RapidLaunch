@@ -30,11 +30,6 @@ namespace RapidLaunch.Controllers
             _log = log;
         }
 
-        public HomeController(RapidLaunchDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IActionResult> Index()
         {
             // Call Rocket Launch API To Get The Next Five Rocket Launches To Be Presented On The Dashboard

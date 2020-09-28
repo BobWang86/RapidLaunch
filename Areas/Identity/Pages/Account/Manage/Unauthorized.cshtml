@@ -1,0 +1,12 @@
+﻿@page
+@model RapidLaunch.Areas.Identity.Pages.Account.Manage.UnauthorizedModel
+@{
+    Layout = "_Layout.cshtml";
+    ViewData["Title"] = "Unauthorized";
+    ViewData["ActivePage"] = ManageNavPages.Unauthorized;
+}
+
+<header>
+    <h5 class="text-danger text-center">@ViewData["Title"]</h5>
+    <p class="text-danger text-center">You do not have access to this resource.</p>
+</header>

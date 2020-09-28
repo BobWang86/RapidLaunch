@@ -1,0 +1,6 @@
+E:\Information Technology\211IT - Web Applications and Databases\RapidLaunch\RapidLaunch\obj\Debug\netcoreapp2.1\RapidLaunch.csprojAssemblyReference.cache
+E:\Information Technology\211IT - Web Applications and Databases\RapidLaunch\RapidLaunch\obj\Debug\netcoreapp2.1\RapidLaunch.RazorAssemblyInfo.cache
+E:\Information Technology\211IT - Web Applications and Databases\RapidLaunch\RapidLaunch\obj\Debug\netcoreapp2.1\RapidLaunch.RazorAssemblyInfo.cs
+E:\Information Technology\211IT - Web Applications and Databases\RapidLaunch\RapidLaunch\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+E:\Information Technology\211IT - Web Applications and Databases\RapidLaunch\RapidLaunch\obj\Debug\netcoreapp2.1\RapidLaunch.AssemblyInfoInputs.cache
+E:\Information Technology\211IT - Web Applications and Databases\RapidLaunch\RapidLaunch\obj\Debug\netcoreapp2.1\RapidLaunch.AssemblyInfo.cs

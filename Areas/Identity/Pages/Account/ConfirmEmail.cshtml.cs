@@ -6,18 +6,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RapidLaunch.Areas.Identity.Services;
 
 namespace RapidLaunch.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationUserManager _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(ApplicationUserManager userManager)
         {
             _userManager = userManager;
         }
+
+        public bool ShowInvalid { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
@@ -35,7 +38,12 @@ namespace RapidLaunch.Areas.Identity.Pages.Account
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
+                //throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                ShowInvalid = true;
             }
 
             return Page();

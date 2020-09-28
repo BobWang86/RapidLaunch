@@ -4,9 +4,20 @@
     ViewData["Title"] = "Confirm email";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h2>@ViewData["Title"]</h2>
 <div>
-    <p>
-        Thank you for confirming your email.
-    </p>
+    @if (Model.ShowInvalid)
+    {
+        <p>Error confirming your emai.</p>
+        <p>
+            If you can login, please try to update your emai. <br />
+            If you cannot login, please try to resend verification.
+        </p>
+    }
+    else
+    {
+        <p>
+            Thank you for confirming your email.
+        </p>
+    }
 </div>

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RapidLaunch", "RapidLaunch.csproj", "{1F365F0D-F492-461C-9B86-6F8E5FBBC404}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidLaunchXUnitTest", "..\RapidLaunchXUnitTest\RapidLaunchXUnitTest.csproj", "{C683D789-3943-4724-9F59-1EF669AAC925}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RapidLaunchXUnitTest", "..\RapidLaunchXUnitTest\RapidLaunchXUnitTest.csproj", "{C683D789-3943-4724-9F59-1EF669AAC925}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

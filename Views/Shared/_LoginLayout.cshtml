@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - RapidLaunch</title>
+    <!-- Favicons -->
+    <link href="~/favicon.ico" rel="icon" />
+    <!-- Bootstrap core CSS -->
+    <link href="~/lib/bootstrap_copy/css/bootstrap.min.css" rel="stylesheet">
+    <!--External CSS-->
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link type="text/css" href="~/css/zabuto_calendar.css" rel="stylesheet">
+    <link type="text/css" href="~/css/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/lib/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+    <link href="~/lib/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+    <link href="~/lib/advanced-datatable/css/DT_bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/morris.js/morris.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/style-responsive.css" rel="stylesheet">
+</head>
+<body>
+    <section id="container">
+        <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+        @*<partial name="_CookieConsentPartial" />*@
+
+        <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars"></div>
+            </div>
+            <!--logo start-->
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="logo"><b>Rapid<span>Launch</span></b></a>
+            <!--logo end-->
+            <div class="top-menu">
+                <partial name="_LoginPartial">
+            </div>
+        </header>
+        <!--header end-->
+        <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+        <!--main content start-->
+        <br />
+        <br />
+        <br />
+        <section class="wrapper">
+            @RenderBody()
+        </section>
+        <!--main content end-->
+
+    <!--common script for all pages-->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery_copy/jquery.min.js"></script>
+    <script src="~/lib/bootstrap_copy/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap-select.min.js"></script>
+    <script src="~/lib/jquery.dcjqaccordion.2.7.js" class="include"></script>
+    <script src="~/lib/jquery.scrollTo.min.js"></script>
+    <script src="~/lib/jquery.nicescroll.js"></script>
+    <script src="~/lib/common-scripts.js"></script>
+    <!--external script for all pages-->
+    <script src="~/lib/advanced-datatable/js/jquery.dataTables.js"></script>
+    <script src="~/lib/raphael/raphael.min.js"></script>
+    <script src="~/lib/morris.js/morris.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

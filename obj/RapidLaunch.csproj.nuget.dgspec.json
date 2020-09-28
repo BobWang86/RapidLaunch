@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GitLab\\New folder\\RapidLaunch\\RapidLaunch.csproj": {}
+    "E:\\Information Technology\\211IT - Web Applications and Databases\\RapidLaunch\\RapidLaunch\\RapidLaunch.csproj": {}
   },
   "projects": {
-    "E:\\GitLab\\New folder\\RapidLaunch\\RapidLaunch.csproj": {
+    "E:\\Information Technology\\211IT - Web Applications and Databases\\RapidLaunch\\RapidLaunch\\RapidLaunch.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GitLab\\New folder\\RapidLaunch\\RapidLaunch.csproj",
+        "projectUniqueName": "E:\\Information Technology\\211IT - Web Applications and Databases\\RapidLaunch\\RapidLaunch\\RapidLaunch.csproj",
         "projectName": "RapidLaunch",
-        "projectPath": "E:\\GitLab\\New folder\\RapidLaunch\\RapidLaunch.csproj",
+        "projectPath": "E:\\Information Technology\\211IT - Web Applications and Databases\\RapidLaunch\\RapidLaunch\\RapidLaunch.csproj",
         "packagesPath": "C:\\Users\\able2\\.nuget\\packages\\",
-        "outputPath": "E:\\GitLab\\New folder\\RapidLaunch\\obj\\",
+        "outputPath": "E:\\Information Technology\\211IT - Web Applications and Databases\\RapidLaunch\\RapidLaunch\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -52,6 +52,10 @@
             "Dapper": {
               "target": "Package",
               "version": "[2.0.30, )"
+            },
+            "IdentityModel": {
+              "target": "Package",
+              "version": "[4.4.0, )"
             },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",
@@ -105,7 +109,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

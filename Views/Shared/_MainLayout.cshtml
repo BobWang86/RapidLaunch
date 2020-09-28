@@ -11,24 +11,23 @@
     <link href="~/lib/bootstrap_copy/css/bootstrap.min.css" rel="stylesheet">
     <!--External CSS-->
     <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="~/css/zabuto_calendar.css">
-    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-select.min.css" />
+    <link type="text/css" href="~/css/zabuto_calendar.css" rel="stylesheet">
+    <link type="text/css" href="~/css/bootstrap-select.min.css" rel="stylesheet" />
     <link href="~/lib/advanced-datatable/css/demo_page.css" rel="stylesheet" />
     <link href="~/lib/advanced-datatable/css/demo_table.css" rel="stylesheet" />
     <link href="~/lib/advanced-datatable/css/DT_bootstrap.css" rel="stylesheet" />
-    <link href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="~/lib/morris.js/morris.css" rel="stylesheet" />
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/style.css" rel="stylesheet">
     <link href="~/css/style-responsive.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
     <section id="container">
         <!-- **********************************************************************************************************************************************************
         TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
-        <partial name="_CookieConsentPartial" />
+        @*<partial name="_CookieConsentPartial" />*@
 
         <!--header start-->
         <header class="header black-bg">
@@ -64,7 +63,6 @@
             </section>
         </section>
         <!--main content end-->
-    </section>
     <!--common script for all pages-->
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery_copy/jquery.min.js"></script>
@@ -77,7 +75,7 @@
     <!--external script for all pages-->
     <script src="~/lib/advanced-datatable/js/jquery.dataTables.js"></script>
     <script src="~/lib/raphael/raphael.min.js"></script>
-    <script src="~/lib/morris/morris.min.js"></script>
+    <script src="~/lib/morris.js/morris.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

@@ -6,8 +6,13 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
     public static class ManageNavPages
     {
         public static string Index => "Index";
+        public static string ChangeEmail => "ChangeEmail";
 
         public static string ChangePassword => "ChangePassword";
+
+        public static string DownloadPersonalData => "DownloadPersonalData";
+
+        public static string DeletePersonalData => "DeletePersonalData";
 
         public static string ExternalLogins => "ExternalLogins";
 
@@ -15,9 +20,17 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
+        public static string Unauthorized => "Unauthorized";
+
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
+        public static string ChangeEmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangeEmail);
+
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
+
+        public static string DownloadPersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DownloadPersonalData);
+
+        public static string DeletePersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DeletePersonalData);
 
         public static string ExternalLoginsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExternalLogins);
 
@@ -25,7 +38,9 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
 
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
 
-        private static string PageNavClass(ViewContext viewContext, string page)
+        public static string UnauthorizedNavClass(ViewContext viewContext) => PageNavClass(viewContext, Unauthorized);
+
+        public static string PageNavClass(ViewContext viewContext, string page)
         {
             var activePage = viewContext.ViewData["ActivePage"] as string
                 ?? System.IO.Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);

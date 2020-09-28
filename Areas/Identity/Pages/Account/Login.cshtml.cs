@@ -9,18 +9,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using RapidLaunch.Areas.Identity.Models;
+using RapidLaunch.Areas.Identity.Services;
 
 namespace RapidLaunch.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationUserManager _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ApplicationUserManager userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -29,7 +33,11 @@ namespace RapidLaunch.Areas.Identity.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        public string UserId { get; set; }
+
         public string ReturnUrl { get; set; }
+
+        public bool ShowResend { get; set; }
 
         [TempData]
         public string ErrorMessage { get; set; }
@@ -87,6 +95,15 @@ namespace RapidLaunch.Areas.Identity.Pages.Account
                 {
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
+                }
+                if (result.IsNotAllowed)
+                {
+                    _logger.LogWarning("User email has not been confirmed.");
+                    ModelState.AddModelError(string.Empty, "Email has not been confirmed");
+                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    UserId = user.Id;
+                    ShowResend = true;
+                    return Page();
                 }
                 else
                 {

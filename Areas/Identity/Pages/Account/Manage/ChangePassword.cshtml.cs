@@ -3,25 +3,32 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using RapidLaunch.Areas.Identity.Models;
+using RapidLaunch.Areas.Identity.Services;
+
 namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IAuthorizationService _authorizationService;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            ApplicationUserManager userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IAuthorizationService authorizationService,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authorizationService = authorizationService;
             _logger = logger;
         }
 
@@ -58,6 +65,12 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, user, UserOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return RedirectToPage("./Unauthorized");
+            }
+
             var hasPassword = await _userManager.HasPasswordAsync(user);
             if (!hasPassword)
             {
@@ -78,6 +91,12 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, user, UserOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return RedirectToPage("./Unauthorized");
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
