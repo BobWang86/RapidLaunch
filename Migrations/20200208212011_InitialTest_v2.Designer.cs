@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
-using RapidLaunch.Data;
+using RapidLaunch.Areas.Identity.Models;
+
 
 namespace RapidLaunch.Migrations
 {

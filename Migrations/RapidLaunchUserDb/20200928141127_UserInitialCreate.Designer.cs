@@ -9,7 +9,7 @@ using RapidLaunch.Areas.Identity.Models;
 
 namespace RapidLaunch.Migrations.RapidLaunchUserDb
 {
-    [DbContext(typeof(RapidLaunchUserDbContext))]
+    [DbContext(typeof(RapidLaunchDbContext))]
     [Migration("20200928141127_UserInitialCreate")]
     partial class UserInitialCreate
     {

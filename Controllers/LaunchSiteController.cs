@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RapidLaunch.Data;
 using RapidLaunch.Models;
 using NetTopologySuite.Geometries;
 using Microsoft.Extensions.Logging;
+using RapidLaunch.Areas.Identity.Models;
 
 namespace RapidLaunch.Controllers
 {

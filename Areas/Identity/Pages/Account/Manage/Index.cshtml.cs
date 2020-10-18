@@ -49,7 +49,6 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-
             var isAuthorized = await _authorizationService.AuthorizeAsync(User, user, UserOperations.Update);
             if (!isAuthorized.Succeeded)
             {
@@ -63,11 +62,11 @@ namespace RapidLaunch.Areas.Identity.Pages.Account.Manage
 
             Input = new UserProfileVM
             {
-                FirstName = Input.FirstName,
-                LastName = Input.LastName,
-                Postcode = Input.Postcode,
-                DOB = Input.DOB,
-                NHSNumber = Input.NHSNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Postcode = user.Postcode,
+                DOB = user.DOB,
+                NHSNumber = user.NHSNumber,
                 PhoneNumber = phoneNumber
             };
 

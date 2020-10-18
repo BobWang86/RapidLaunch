@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using RapidLaunch.Data;
 using RapidLaunch.Models;
 using RapidLaunch.Models.ViewModels;
-using RapidLaunch.Models.Repository;
 using Microsoft.Extensions.Logging;
+using RapidLaunch.Areas.Identity.Models;
 
 namespace RapidLaunch.Controllers
 {
@@ -51,6 +50,11 @@ namespace RapidLaunch.Controllers
             IEnumerable<LaunchHistory> histories = await _context.LaunchHistories.OrderBy(l => l.LaunchYear).AsNoTracking().ToListAsync();
 
             return Json(histories);
+        }
+
+        public IActionResult PageNotFound()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

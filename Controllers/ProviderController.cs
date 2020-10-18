@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RapidLaunch.Data;
+using RapidLaunch.Areas.Identity.Models;
 using RapidLaunch.Models;
-using RapidLaunch.Models.Repository;
 using RapidLaunch.Models.ViewModels;
 
 namespace RapidLaunch.Controllers

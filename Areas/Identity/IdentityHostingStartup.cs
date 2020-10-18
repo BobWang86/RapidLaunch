@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RapidLaunch.Data;
+
 
 [assembly: HostingStartup(typeof(RapidLaunch.Areas.Identity.IdentityHostingStartup))]
 namespace RapidLaunch.Areas.Identity

@@ -1,6 +1,6 @@
 
 /* Import fonts */
-@import url(http://fonts.googleapis.com/css?family=Ruda:400,700,900);
+/*@import url(http://fonts.googleapis.com/css?family=Ruda:400,700,900);*/
 
 /* BASIC THEME CONFIGURATION */
 body {
@@ -62,10 +62,7 @@ a, a:hover, a:focus {
 	text-decoration: none;
 }
 
-
-
 /*Theme Backgrounds*/
-
 .bg-theme {
 	background-color: #4ECDC4;
 }
@@ -101,8 +98,8 @@ a, a:hover, a:focus {
 .bg-rocket05 {
     background-color: #003b59;
 }
-/*Theme Buttons*/
 
+/*Theme Buttons*/
 .btn-theme {
   color: #fff;
   background-color: #4ECDC4;
@@ -204,7 +201,6 @@ hr {
 	margin-bottom: 25px;
 }
 
-
 .no-padding {
 	padding: 0 !important;
 }
@@ -277,7 +273,7 @@ ul.top-menu > li > .logout {
     height:17px;
     width:17px;
     display:inline-block;
-    background: url("../img/nav-expand.png") no-repeat top;
+    /*background: url("../img/nav-expand.png") no-repeat top;*/
     border-radius:3px;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
@@ -286,7 +282,7 @@ ul.top-menu > li > .logout {
     top:15px;
 }
 .active .dcjq-icon {
-    background: url("../img/nav-expand.png") no-repeat bottom;
+    /*background: url("../img/nav-expand.png") no-repeat bottom;*/
     border-radius:3px;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
@@ -439,7 +435,7 @@ ul.sidebar-menu li a.active i {
 
 .wrapper {
     display: inline-block;
-    margin-top: 60px;
+    margin-top: 40px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;
@@ -2094,11 +2090,11 @@ profile-text p {
 }
 
 .detailed h4 {
-	text-align: center;
-	text-transform: uppercase;
-	border-bottom: 1px solid #e2e2e2;
-	font-weight: 700;
-	color: #48cfad;
+    text-align: center;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e2e2e2;
+    font-weight: 700;
+    color: #797979;
 }
 
 ul.my-friends {

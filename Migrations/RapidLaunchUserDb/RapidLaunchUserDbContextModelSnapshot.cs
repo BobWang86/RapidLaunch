@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using RapidLaunch.Areas.Identity.Models;
 
 namespace RapidLaunch.Migrations.RapidLaunchUserDb
 {
-    [DbContext(typeof(RapidLaunchUserDbContext))]
+    [DbContext(typeof(RapidLaunchDbContext))]
     partial class RapidLaunchUserDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -85,11 +86,9 @@ namespace RapidLaunch.Migrations.RapidLaunchUserDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -120,11 +119,9 @@ namespace RapidLaunch.Migrations.RapidLaunchUserDb
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -198,6 +195,457 @@ namespace RapidLaunch.Migrations.RapidLaunchUserDb
                     b.ToTable("tblUser");
                 });
 
+            modelBuilder.Entity("RapidLaunch.Models.Address", b =>
+                {
+                    b.Property<int>("AddressID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired();
+
+                    b.Property<string>("AddressLine2");
+
+                    b.Property<string>("City")
+                        .IsRequired();
+
+                    b.Property<string>("Country")
+                        .IsRequired();
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired();
+
+                    b.Property<string>("State")
+                        .IsRequired();
+
+                    b.HasKey("AddressID");
+
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Contact", b =>
+                {
+                    b.Property<int>("ContactID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AddressID");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired();
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired();
+
+                    b.HasKey("ContactID");
+
+                    b.HasIndex("AddressID")
+                        .IsUnique();
+
+                    b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("GroupName")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("DepartmentID");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.DepartmentHistory", b =>
+                {
+                    b.Property<int>("StaffID");
+
+                    b.Property<int>("DepartmentID");
+
+                    b.Property<int>("ShiftID");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("StaffID", "DepartmentID", "ShiftID");
+
+                    b.HasIndex("DepartmentID");
+
+                    b.HasIndex("ShiftID");
+
+                    b.ToTable("DepartmentHistories");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Launch", b =>
+                {
+                    b.Property<int>("LaunchID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("LaunchDate")
+                        .HasColumnType("DateTime2");
+
+                    b.Property<int>("LaunchOrbitID");
+
+                    b.Property<int>("LaunchPadID");
+
+                    b.Property<int>("LaunchStatusID");
+
+                    b.Property<DateTime>("LaunchTime")
+                        .HasColumnType("DateTime2");
+
+                    b.Property<int>("RocketID");
+
+                    b.HasKey("LaunchID");
+
+                    b.HasIndex("LaunchOrbitID");
+
+                    b.HasIndex("LaunchPadID");
+
+                    b.HasIndex("LaunchStatusID");
+
+                    b.HasIndex("RocketID");
+
+                    b.ToTable("Launches");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.LaunchOrbit", b =>
+                {
+                    b.Property<int>("LaunchOrbitID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("LaunchOrbitID");
+
+                    b.ToTable("LaunchOrbits");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.LaunchPad", b =>
+                {
+                    b.Property<int>("LaunchPadID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LaunchPadCode")
+                        .IsRequired();
+
+                    b.Property<int>("LaunchSiteID");
+
+                    b.HasKey("LaunchPadID");
+
+                    b.HasIndex("LaunchSiteID");
+
+                    b.ToTable("LaunchPads");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.LaunchSite", b =>
+                {
+                    b.Property<int>("LaunchSiteID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("BuildDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Country");
+
+                    b.Property<Point>("Location");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("LaunchSiteID");
+
+                    b.ToTable("LaunchSites");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.LaunchStatus", b =>
+                {
+                    b.Property<int>("LaunchStatusID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("LaunchStatusID");
+
+                    b.ToTable("LaunchStatuses");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Manufacturer", b =>
+                {
+                    b.Property<int>("ManufacturerID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Country");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("ManufacturerID");
+
+                    b.ToTable("Manufacturers");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.PayHistory", b =>
+                {
+                    b.Property<int>("StaffID");
+
+                    b.Property<DateTime>("PayDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("Allowance")
+                        .HasColumnType("money");
+
+                    b.Property<double?>("Percentage");
+
+                    b.HasKey("StaffID", "PayDate");
+
+                    b.ToTable("PayHistories");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.PayRate", b =>
+                {
+                    b.Property<int>("PayRateID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Rank");
+
+                    b.HasKey("PayRateID");
+
+                    b.ToTable("PayRates");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Person", b =>
+                {
+                    b.Property<int>("PersonID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ContactID");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.Property<string>("NationalInsuranceNumber")
+                        .IsRequired();
+
+                    b.HasKey("PersonID");
+
+                    b.HasIndex("ContactID")
+                        .IsUnique();
+
+                    b.ToTable("People");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Position", b =>
+                {
+                    b.Property<int>("PositionID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DepartmentID");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int>("PayRateID");
+
+                    b.HasKey("PositionID");
+
+                    b.HasIndex("DepartmentID");
+
+                    b.HasIndex("PayRateID");
+
+                    b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Provider", b =>
+                {
+                    b.Property<int>("ProviderID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime?>("EstablishDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("ProviderID");
+
+                    b.ToTable("Providers");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Rocket", b =>
+                {
+                    b.Property<int>("RocketID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ManufactureDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("RocketCode")
+                        .IsRequired();
+
+                    b.Property<int>("RocketModelID");
+
+                    b.Property<int>("RocketStatusID");
+
+                    b.HasKey("RocketID");
+
+                    b.HasIndex("RocketModelID");
+
+                    b.HasIndex("RocketStatusID");
+
+                    b.ToTable("Rockets");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.RocketCategory", b =>
+                {
+                    b.Property<int>("RocketCategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("RocketCategoryID");
+
+                    b.ToTable("RocketCategories");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.RocketModel", b =>
+                {
+                    b.Property<int>("RocketModelID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<double?>("Diameter");
+
+                    b.Property<double?>("Height");
+
+                    b.Property<int>("ManufacturerID");
+
+                    b.Property<double?>("Mass");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<double?>("PayloadGTO");
+
+                    b.Property<double?>("PayloadLEO");
+
+                    b.Property<int>("RocketCategoryID");
+
+                    b.HasKey("RocketModelID");
+
+                    b.HasIndex("ManufacturerID");
+
+                    b.HasIndex("RocketCategoryID");
+
+                    b.ToTable("RocketModels");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.RocketModelLink", b =>
+                {
+                    b.Property<int>("ProviderID");
+
+                    b.Property<int>("RocketModelID");
+
+                    b.HasKey("ProviderID", "RocketModelID");
+
+                    b.HasIndex("RocketModelID");
+
+                    b.ToTable("RocketModelLinks");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.RocketStatus", b =>
+                {
+                    b.Property<int>("RocketStatusID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("RocketStatusID");
+
+                    b.ToTable("RocketStatuses");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Shift", b =>
+                {
+                    b.Property<int>("ShiftID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ShiftID");
+
+                    b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Staff", b =>
+                {
+                    b.Property<int>("StaffID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("PersonID");
+
+                    b.Property<int>("PositionID");
+
+                    b.HasKey("StaffID");
+
+                    b.HasIndex("PersonID")
+                        .IsUnique();
+
+                    b.HasIndex("PositionID");
+
+                    b.ToTable("Staff");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -240,6 +688,144 @@ namespace RapidLaunch.Migrations.RapidLaunchUserDb
                     b.HasOne("RapidLaunch.Areas.Identity.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Contact", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Address", "Address")
+                        .WithOne("Contact")
+                        .HasForeignKey("RapidLaunch.Models.Contact", "AddressID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.DepartmentHistory", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Department", "Department")
+                        .WithMany("DepartmentHistories")
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("RapidLaunch.Models.Shift", "Shift")
+                        .WithMany("DepartmentHistories")
+                        .HasForeignKey("ShiftID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("RapidLaunch.Models.Staff", "Staff")
+                        .WithMany("DepartmentHistories")
+                        .HasForeignKey("StaffID")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Launch", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.LaunchOrbit", "LaunchOrbit")
+                        .WithMany("Launchs")
+                        .HasForeignKey("LaunchOrbitID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.LaunchPad", "LaunchPad")
+                        .WithMany("Launches")
+                        .HasForeignKey("LaunchPadID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.LaunchStatus", "LaunchStatus")
+                        .WithMany("Launches")
+                        .HasForeignKey("LaunchStatusID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.Rocket", "Rocket")
+                        .WithMany("Launches")
+                        .HasForeignKey("RocketID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.LaunchPad", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.LaunchSite", "LaunchSite")
+                        .WithMany("LaunchPads")
+                        .HasForeignKey("LaunchSiteID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.PayHistory", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Staff", "Staff")
+                        .WithMany("PayHistories")
+                        .HasForeignKey("StaffID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Person", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Contact", "Contact")
+                        .WithOne("Person")
+                        .HasForeignKey("RapidLaunch.Models.Person", "ContactID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Position", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Department", "Department")
+                        .WithMany("Positions")
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.PayRate", "PayRate")
+                        .WithMany("Positions")
+                        .HasForeignKey("PayRateID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Rocket", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.RocketModel", "RocketModel")
+                        .WithMany("Rockets")
+                        .HasForeignKey("RocketModelID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.RocketStatus", "RocketStatus")
+                        .WithMany("Rockets")
+                        .HasForeignKey("RocketStatusID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.RocketModel", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Manufacturer", "Manufacturer")
+                        .WithMany("RocketModels")
+                        .HasForeignKey("ManufacturerID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("RapidLaunch.Models.RocketCategory", "RocketCategory")
+                        .WithMany("RocketModels")
+                        .HasForeignKey("RocketCategoryID")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.RocketModelLink", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Provider", "Provider")
+                        .WithMany("RocketModelLinks")
+                        .HasForeignKey("ProviderID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.RocketModel", "RocketModel")
+                        .WithMany("RocketModelLinks")
+                        .HasForeignKey("RocketModelID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RapidLaunch.Models.Staff", b =>
+                {
+                    b.HasOne("RapidLaunch.Models.Person", "Person")
+                        .WithOne("Staff")
+                        .HasForeignKey("RapidLaunch.Models.Staff", "PersonID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RapidLaunch.Models.Position", "Position")
+                        .WithMany("Staff")
+                        .HasForeignKey("PositionID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

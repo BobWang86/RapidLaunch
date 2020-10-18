@@ -17,19 +17,16 @@ namespace RapidLaunch.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationUserManager _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             ApplicationUserManager userManager,
-            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
         }

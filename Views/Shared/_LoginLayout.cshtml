@@ -11,16 +11,20 @@
     <link href="~/lib/bootstrap_copy/css/bootstrap.min.css" rel="stylesheet">
     <!--External CSS-->
     <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link type="text/css" href="~/css/zabuto_calendar.css" rel="stylesheet">
-    <link type="text/css" href="~/css/bootstrap-select.min.css" rel="stylesheet" />
-    <link href="~/lib/advanced-datatable/css/demo_page.css" rel="stylesheet" />
-    <link href="~/lib/advanced-datatable/css/demo_table.css" rel="stylesheet" />
-    <link href="~/lib/advanced-datatable/css/DT_bootstrap.css" rel="stylesheet" />
-    <link href="~/lib/morris.js/morris.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-select.min.css" rel="stylesheet" />
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/style.css" rel="stylesheet">
     <link href="~/css/style-responsive.css" rel="stylesheet">
+
+    <!--common script for all pages-->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery_copy/jquery.min.js"></script>
+    <script src="~/lib/bootstrap_copy/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap-select.min.js"></script>
+    <script src="~/lib/jquery.dcjqaccordion.2.7.js" class="include"></script>
+    <script src="~/lib/jquery.scrollTo.min.js"></script>
+    <script src="~/lib/jquery.nicescroll.js"></script>
+    <script src="~/lib/common-scripts.js"></script>
 </head>
 <body>
     <section id="container">
@@ -53,20 +57,7 @@
             @RenderBody()
         </section>
         <!--main content end-->
-
-    <!--common script for all pages-->
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery_copy/jquery.min.js"></script>
-    <script src="~/lib/bootstrap_copy/js/bootstrap.min.js"></script>
-    <script src="~/lib/bootstrap-select.min.js"></script>
-    <script src="~/lib/jquery.dcjqaccordion.2.7.js" class="include"></script>
-    <script src="~/lib/jquery.scrollTo.min.js"></script>
-    <script src="~/lib/jquery.nicescroll.js"></script>
-    <script src="~/lib/common-scripts.js"></script>
-    <!--external script for all pages-->
-    <script src="~/lib/advanced-datatable/js/jquery.dataTables.js"></script>
-    <script src="~/lib/raphael/raphael.min.js"></script>
-    <script src="~/lib/morris.js/morris.min.js"></script>
+    </section>
 
     @RenderSection("Scripts", required: false)
 </body>

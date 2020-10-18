@@ -10,7 +10,7 @@
         <h4>Rocket Models</h4>
     </div>
     <div class="col-md-6">
-        <a asp-action="Create" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Create New</a>
+        <a asp-action="Create" class="btn btn-theme pull-right tooltips" data-placement="left" data-original-title="Create New Rocket Model"><i class="fa fa-plus-circle"></i> Create New</a>
     </div>
 </div>
 <hr>
@@ -24,7 +24,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
-                        <th style="max-width: 800px">
+                        <th style="max-width: 600px">
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
                         <th class="hidden-phone">
@@ -42,7 +42,7 @@
                         <th class="hidden-phone">
                             @Html.DisplayNameFor(model => model.PayloadGTO)
                         </th>
-                        <th>
+                        <th style="max-width: 200px">
                             @Html.DisplayNameFor(model => model.Manufacturer)
                         </th>
                         <th>
@@ -60,7 +60,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        <td style="max-width: 800px">
+                        <td style="max-width: 600px">
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td class="hidden-phone">
@@ -78,7 +78,7 @@
                         <td class="hidden-phone">
                             @Html.DisplayFor(modelItem => item.PayloadGTO)
                         </td>
-                        <td>
+                        <td style="max-width: 200px">
                             @Html.DisplayFor(modelItem => item.Manufacturer.Name)
                         </td>
                         <td>

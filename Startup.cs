@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RapidLaunch.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -35,6 +34,12 @@ namespace RapidLaunch
                 options.ForwardClientCertificate = false;
             });
 
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IAuthorizationHandler, UserAuthorizationHandler>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory>();
+            services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(1));
+
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 // Password Settings
                 options.Password.RequireDigit = true;
@@ -55,7 +60,7 @@ namespace RapidLaunch
                 options.SignIn.RequireConfirmedEmail = true;
 
             })
-                .AddEntityFrameworkStores<RapidLaunchUserDbContext>()
+                .AddEntityFrameworkStores<RapidLaunchDbContext>()
                 .AddUserManager<ApplicationUserManager>()
                 .AddDefaultTokenProviders();
 
@@ -78,18 +83,10 @@ namespace RapidLaunch
                 options.SlidingExpiration = true;
             });
 
-            services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(1));
-            services.AddSingleton<IEmailSender, EmailSender>();
-            services.AddScoped<IAuthorizationHandler, UserAuthorizationHandler>();
-            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory>();
 
-            services.AddDbContext<RapidLaunchUserDbContext>(options =>
+            services.AddDbContext<RapidLaunchDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("LocalIdentityConnection")));
-
-            //services.AddDbContext<RapidLaunchDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("LocalDbConnection"), x => x.UseNetTopologySuite()));
+                    Configuration.GetConnectionString("ServerDbConnection"), x => x.UseNetTopologySuite()));
 
             services.AddMvc(config => {
                 //var policy = new AuthorizationPolicyBuilder()
@@ -116,6 +113,15 @@ namespace RapidLaunch
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Request.Path = "/Home/PageNotFound";
+                    await next();
+                }
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -135,68 +141,9 @@ namespace RapidLaunch
             });
 
             // Initialize the database with data seeding
-            RapidLaunchDbInitializer.Initialize(app);
+            //RapidLaunchDbInitializer.Initialize(app);
         }
     }
 
-    public class EmailSender : IEmailSender
-    {
-        private const string ExchangeUri = "https://c9-ex01.c9.sshis.nhs.uk/EWS/Exchange.asmx";
-        private const string ImpersonatedMailBox = "Haobo.Wang@mpft.nhs.uk";
 
-        //private static ExchangeService GetExchangeService()
-        //{
-        //    ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2)
-        //    {
-        //        Credentials = new WebCredentials("RioExchImp", "W1nter1!"),
-        //        Url = new Uri(ExchangeUri)
-        //    };
-        //    return service;
-        //}
-
-        public System.Threading.Tasks.Task SendEmailAsync(string email, string subject, string message)
-        {
-            //try
-            //{
-            //    Email newEmail = new Email
-            //    {
-            //        Origin = "Haywood Arthritis Portal",
-            //        EmailSubject = subject,
-            //        EmailBody = message,
-            //        DateCreated = DateTime.Now,
-            //        EmailRecipient = new List<EmailRecipient> { new EmailRecipient { EmailAddress = email } }
-            //    };
-
-            //    SendEmail(email, newEmail.EmailSubject, newEmail.EmailBody, newEmail.Origin);
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
-
-            return System.Threading.Tasks.Task.CompletedTask;
-        }
-
-        public static void SendEmail(string toEmail, string subject, string body, string origin)
-        {
-            //try
-            //{
-            //    ExchangeService service = GetExchangeService();
-
-            //    service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, ImpersonatedMailBox);
-
-            //    EmailMessage message = new EmailMessage(service)
-            //    {
-            //        ToRecipients = { new EmailAddress(toEmail) },
-            //        Subject = subject,
-            //        Body = new MessageBody(BodyType.HTML, body)
-            //    };
-            //    message.SendAndSaveCopy();
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
-        }
-    }
 }

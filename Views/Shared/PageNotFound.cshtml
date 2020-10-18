@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Not Found";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keyword" content="Rapid, Launch, RapidLaunch">
+    <title>@ViewData["Title"] - RapidLaunch</title>
+
+    <!-- Favicons -->
+    <link href="~/favicon.ico" rel="icon">
+    <!-- Bootstrap core CSS -->
+    <link href="~/lib/bootstrap_copy/css/bootstrap.min.css" rel="stylesheet">
+    <!--external css-->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/table-responsive.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 p404 centered">
+                <img src="~/img/404.png" alt="">
+                <h1>DON'T PANIC!!</h1>
+                <h3>The page you are looking for doesn't exist.</h3>
+                <a class="btn btn-theme btn-block" asp-action="Index" asp-controller="Home">Return To Home Page</a>
+                <br>
+            </div>
+        </div>
+    </div>
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="~/lib/jquery_copy/jquery.min.js"></script>
+    <script src="~/lib/bootstrap_copy/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+

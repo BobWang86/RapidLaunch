@@ -1,14 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RapidLaunch.Models;
 
-namespace RapidLaunch.Data
+namespace RapidLaunch.Areas.Identity.Models
 {
-    public class RapidLaunchDbContext : DbContext
+    public class RapidLaunchDbContext : IdentityDbContext<ApplicationUser>
     {
-        public RapidLaunchDbContext(DbContextOptions<RapidLaunchDbContext> options) : base(options)
-        {
-
-        }
+        public RapidLaunchDbContext(DbContextOptions<RapidLaunchDbContext> options) : base(options) { }
 
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
@@ -34,63 +33,101 @@ namespace RapidLaunch.Data
         public DbSet<Staff> Staff { get; set; }
         public DbQuery<LaunchHistory> LaunchHistories { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<RocketModel>()
+            base.OnModelCreating(builder);
+
+            builder.Entity<ApplicationUser>(b =>
+            {
+                b.ToTable("tblUser");
+            });
+
+            builder.Entity<IdentityRole>(b =>
+            {
+                b.ToTable("tblRole");
+            });
+
+            builder.Entity<IdentityUserRole<string>>(b =>
+            {
+                b.ToTable("tblUserRole");
+            });
+
+            builder.Entity<IdentityUserClaim<string>>(b =>
+            {
+                b.ToTable("tblUserClaim");
+            });
+
+            builder.Entity<IdentityUserLogin<string>>(b =>
+            {
+                b.ToTable("tblUserLogin");
+            });
+
+            builder.Entity<IdentityUserToken<string>>(b =>
+            {
+                b.ToTable("tblUserToken");
+            });
+
+            builder.Entity<IdentityRoleClaim<string>>(b =>
+            {
+                b.ToTable("tblRoleClaim");
+            });
+
+            builder.Entity<RocketModel>()
                 .HasOne(r => r.Manufacturer)
                 .WithMany(m => m.RocketModels)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<RocketModel>()
+            builder.Entity<RocketModel>()
                 .HasOne(r => r.RocketCategory)
                 .WithMany(r => r.RocketModels)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Launch>()
+            builder.Entity<Launch>()
                 .HasOne(l => l.Rocket)
                 .WithMany(r => r.Launches)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Launch>()
+            builder.Entity<Launch>()
                 .HasOne(l => l.LaunchPad)
                 .WithMany(l => l.Launches)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<LaunchPad>()
+            builder.Entity<LaunchPad>()
                 .HasMany(p => p.Launches)
                 .WithOne(l => l.LaunchPad)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Rocket>()
+            builder.Entity<Rocket>()
                 .HasMany(r => r.Launches)
                 .WithOne(l => l.Rocket)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<DepartmentHistory>()
+            builder.Entity<DepartmentHistory>()
                 .HasOne(d => d.Staff)
                 .WithMany(s => s.DepartmentHistories)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DepartmentHistory>()
+            builder.Entity<DepartmentHistory>()
                 .HasOne(d => d.Department)
                 .WithMany(d => d.DepartmentHistories)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DepartmentHistory>()
+            builder.Entity<DepartmentHistory>()
                 .HasOne(d => d.Shift)
                 .WithMany(s => s.DepartmentHistories)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DepartmentHistory>()
+            builder.Entity<DepartmentHistory>()
                 .HasKey(o => new { o.StaffID, o.DepartmentID, o.ShiftID });
 
-            modelBuilder.Entity<PayHistory>()
+            builder.Entity<PayHistory>()
                 .HasKey(o => new { o.StaffID, o.PayDate });
 
-            modelBuilder.Entity<RocketModelLink>()
+            builder.Entity<RocketModelLink>()
                 .HasKey(o => new { o.ProviderID, o.RocketModelID });
 
-            modelBuilder.Query<LaunchHistory>().ToView("LaunchHistoryByYear");
+            builder.Query<LaunchHistory>().ToView("LaunchHistoryByYear");
         }
     }
 }

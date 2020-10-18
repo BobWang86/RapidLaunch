@@ -30,7 +30,6 @@ var Gritter = function () {
          */
 
         return false;
-
     });
 
     $('#add-regular').click(function(){
@@ -49,7 +48,6 @@ var Gritter = function () {
         });
 
         return false;
-
     });
 
     $('#add-max').click(function(){
@@ -74,7 +72,6 @@ var Gritter = function () {
         });
 
         return false;
-
     });
 
     $('#add-without-image').click(function(){
@@ -108,7 +105,4 @@ var Gritter = function () {
         return false;
 
     });
-
-
-
 }();

@@ -13,6 +13,7 @@ namespace RapidLaunch.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LaunchPadID { get; set; }
         [Required]
+        [Display(Name = "LaunchPad Code")]
         public string LaunchPadCode { get; set; }
 
         [Display(Name = "Launch Site")]

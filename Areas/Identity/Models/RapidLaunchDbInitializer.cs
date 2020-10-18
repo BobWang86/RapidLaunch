@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using Bogus;
 using Bogus.Extensions.UnitedStates;
 
-namespace RapidLaunch.Data
+namespace RapidLaunch.Areas.Identity.Models
 {
     public class RapidLaunchDbInitializer
     {
